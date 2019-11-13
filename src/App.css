@@ -160,10 +160,22 @@ body {
 }
 
 .active {
- height: 7vw;
-  width: 7vw;
-  border-radius: 10%;
+ height: 3vw;
+  width: 3vw;
   background-size: cover;
   position: absolute;
   z-index: 3;
+}
+
+.candy-cane-missile {
+  animation: rotateZ 1s;
+  background-image: url('resources/images/candy-cane.png'); 
+  border-radius: 50%;
+}
+
+@keyframes rotateZ {
+  0% {transform: rotateZ(0deg);background-color: transparent;}
+  25% {transform: rotateZ(90deg);background-color: rgba(255,255,255,.7);}
+  50% {transform: rotateZ(180deg);background-color: transparent;}
+  75% {transform: rotateZ(270deg);background-color: rgba(255,255,255,.7);}
 }

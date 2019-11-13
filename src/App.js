@@ -19,18 +19,34 @@ import './App.css';
   var progress = 0
   var activeItem = "Candy Cane"
   var objects = []
+  var obstacles = [{name: "skeleton",position: [100,54]},{name: "skeleton",position: [250,54]},{name: "skeleton",position: [375,54]},{name: "skeleton",position: [500,54]}]
 
 function App() {
+  objects = objects.filter((obstacle)=>{return obstacle!==null})
+  obstacles = obstacles.filter((obstacle)=>{return obstacle!==null})
+  var snowmen = obstacles.map((obstacle)=>{return <figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: obstacle.position[0]+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>})
+
   useEffect(()=>{
     if(health===0){window.location.reload()}
 
     // console.log(lift)
      //console.log(action)
     // console.log(moving)
-      obstacles.forEach((obstacle)=>{
+      obstacles.forEach((obstacle,index)=>{
     if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
       health-=1
     }
+    objects.forEach((obj,index)=>{
+      if(obj) {
+
+        if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
+        if(obj.range<=0){objects[index]=null}
+        if (obstacle.position[0] <= obj.position[0]-progress +2 && obstacle.position[0] >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
+            obstacles[index]=null
+            objects[index]=null
+          }
+        }
+      })
   })
 
   if(lift>0&&lift<=maxJump) {
@@ -74,10 +90,16 @@ function App() {
     } else {
       if((x===50 || x===20)&&moving) {scroll()}
     }
+    objects.forEach((object)=>{
+      if(object){
+        object.range--
+        object.position[0] += object.direction==='left'?-2:2
+      }
+    })
     setAction(!action)
   },50)
 
-  var obstacles = [{component:<figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: 100+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>,position:[100+skeleton/4,54]},{component:<figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: 175+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>,position:[175+skeleton/4,54]},{component:<figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: 250+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>,position:[250+skeleton/4,54]},{component:<figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: 475+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>,position:[475+skeleton/4,54]},]
+ 
   position=[x-progress-modifier,y]
 
 const handleResize = () => {
@@ -116,18 +138,12 @@ const handleResize = () => {
     }  
   }
 
-  const act = (e) =>{
-    e.preventDefault()
-    e.stopPropagation()
-    alert()
-  }
-
   const scroll = () => {
     progress = moving==="left"? progress+1 : moving==="right"?progress-1: progress
   }
 
-  const candyCane = () => {
-    objects.push({component:<div className="active candy-cane" style={{left: pos[0]+'vw', top: pos[1]+"vh"}}></div>,position:pos})
+  var candyCane = () => {
+    objects.push({position:pos,direction:moving,range:20})
   }
 
   window.addEventListener('resize', handleResize);
@@ -147,8 +163,8 @@ const handleResize = () => {
       <section className={'action-box '+items.filter((item)=>{return item.name===activeItem})[0].className} onClick={items.filter((item)=>{return item.name===activeItem})[0].method} style={{}}></section>
       <figure className={playerClass} style={{left: pos[0]+'vw', top: pos[1]+"vh"}}> 
       </figure>
-      {obstacles.map((obj)=>{return obj.component})}
-      {objects.map((obj)=>{return obj.component})}
+      {snowmen.map((obj)=>{return obj})}
+      {objects.map((obj)=>{return <div className="active candy-cane-missile" style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
     </div>
     <button className="button-right" onMouseDown={right} onMouseUp={stop} onTouchStart={right} onTouchEnd={stop}>
     </button>
