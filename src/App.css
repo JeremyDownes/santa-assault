@@ -1,0 +1,169 @@
+
+body {  
+  overflow-y: hidden;
+  overflow-x: hidden;
+  padding: 1vh 1vw;
+  background-color: #282c34;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: #282c34;
+  min-height:73vh;
+}
+
+.player {
+  height: 6vw;
+  width: 6vw;
+  position: absolute;
+}
+
+.button-left {
+  position: fixed;
+  left: 1vw;
+  background-image: url('resources/images/arrow-left.png');
+}
+
+.button-right {
+  background-image: url('resources/images/arrow-right.png');
+  position: fixed;
+  right: 1vw;
+}
+
+.button-left, .button-right {
+  z-index: 2;
+  height: 73vh;
+  width: 9vw;
+  background-color: #777;
+  background-size: contain;
+  background-repeat: no-repeat; 
+  background-position: center; 
+}
+
+.field {
+  width: 80vw;
+  height: 73vh;
+  z-index: 1;
+  position: fixed;
+  background-image: url('resources/images/background.jpg');
+  background-size: cover;
+}
+
+.stand-right {
+ background-image: url('resources/images/standing-right.gif'); 
+ background-size: cover;
+}
+
+.run-right {
+ background-image: url('resources/images/running-right.gif'); 
+ background-size: cover;
+}
+
+.stand-left {
+ background-image: url('resources/images/standing-left.gif'); 
+ background-size: cover;
+}
+
+.run-left {
+ background-image: url('resources/images/running-left.gif'); 
+ background-size: cover;
+}
+
+.jump-left {
+ background-image: url('resources/images/jump-left.gif'); 
+ background-size: cover;
+}
+
+.jump-right {
+ background-image: url('resources/images/jump-right.gif'); 
+ background-size: cover;
+}
+
+.overlay {
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  background-color: #282c34;
+  z-index: 2;
+}
+
+.skeleton {
+  position: absolute;
+  width: 6vw;
+  height: 6vw;
+  background-image: url('resources/images/skeleton.gif');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.alt {
+  background-image: url('resources/images/skeleton-alt.gif');
+}
+
+.health-bar {
+  position: absolute;
+  top: 2vh;
+  left: 2vw;
+  height: 2vh;
+  background-color: red;
+}
+
+.action-box {
+  border: 1px solid black;
+  height: 7vw;
+  width: 7vw;
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  border-radius: 10%;
+  z-index: 2;
+  background-size: cover;
+}
+
+.mask {
+  width: 100%;
+  height: 73vh;
+  z-index: 1;
+  position: fixed;
+}
+
+.menu {
+  height: 20vh;
+  width: 98vw;
+  background-color: #555;
+  position: absolute;
+  z-index: 3;
+  top: 74vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item {
+  height: 7vw;
+  width: 7vw;
+  border-radius: 10%;
+  background-size: cover;
+}
+
+.candy-cane {
+  background-image: url('resources/images/candy-cane.jpg');
+}
+
+.active {
+ height: 7vw;
+  width: 7vw;
+  border-radius: 10%;
+  background-size: cover;
+  position: absolute;
+  z-index: 3;
+}
