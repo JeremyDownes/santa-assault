@@ -18,12 +18,19 @@ import './App.css';
   var progress = 0
   var activeItem = "Candy Cane"
   var objects = []
-  var obstacles = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [250,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0}]
+  var obstacles = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [650,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [150,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [950,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [350,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [650,54],range:80,flip: 1,count: 0},{name: "ginger",position: [250,54],range:80,flip: 1,count: 0},{name: "ginger",position: [400,54],range:80,flip: 1,count: 0},{name: "ginger",position: [700,54],range:80,flip: 1,count: 0},]
 
 function App() {
+
   objects = objects.filter((obstacle)=>{return obstacle!==null})
   obstacles = obstacles.filter((obstacle)=>{return obstacle!==null})
-  var snowmen = obstacles.map((obstacle)=>{return <figure className='snowman' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
+
+  var snowmen = obstacles.filter((obstacle)=>{return obstacle.name==="snowman"})
+  snowmen = snowmen.map((obstacle)=>{return <figure className='snowman' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
+  var gingers = obstacles.filter((obstacle)=>{return obstacle.name==="ginger"})
+  gingers = gingers.map((obstacle)=>{return <figure className='ginger' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
+  var gumdrops = obstacles.filter((obstacle)=>{return obstacle.name==="gumdrop"})
+  gumdrops = gumdrops.map((obstacle)=>{return <figure className='gumdrop' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh"}}></figure>})
 
   useEffect(()=>{
     if(health===0){window.location.reload()}
@@ -32,25 +39,36 @@ function App() {
     // console.log(moving)
     obstacles.forEach((obstacle,index)=>{
       if(obstacle) {
-        obstacles[index].position = [obstacle.position[0]+.25*obstacle.flip,obstacle.position[1]]
-        obstacle.count++
-      if(obstacle.count===obstacle.range) {
-        obstacle.flip*=-1
-        obstacle.count=0
-      }
-      if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
-        health-=1
-      }
-      objects.forEach((obj,index)=>{
-        if(obj) {
-          if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
-          if(obj.range<=0){objects[index]=null}
-          if (obstacle.position[0]+modifier <= obj.position[0]-progress +2  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
-            obstacles[index]=null
-            objects[index]=null
+
+        if(obstacle.name==='gumdrop') {
+          if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
+            pos=[pos[0]-1,pos[1]]
           }
-         }
-      })
+        }
+
+
+        if(obstacle.name==='snowman'||obstacle.name==='ginger') {
+          obstacles[index].position = [obstacle.position[0]+.25*obstacle.flip,obstacle.position[1]]
+          obstacle.count++
+          if(obstacle.count===obstacle.range) {
+            obstacle.flip*=-1
+            obstacle.count=0
+          }
+          if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
+            health-=1
+          }
+
+        objects.forEach((obj,index)=>{
+          if(obj) {
+            if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
+            if(obj.range<=0){objects[index]=null}
+            if (obstacle.position[0]+modifier <= obj.position[0]-progress +2  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
+              obstacles[index]=null
+              objects[index]=null
+            }
+           }
+        })
+      }
     }
   })
 
@@ -139,6 +157,10 @@ const handleResize = () => {
     }  
   }
 
+  const spacebar = (e) => {
+    if(e.keyCode===32){jump() }
+  }
+
   const scroll = () => {
     progress = moving==="left"? progress+1 : moving==="right"?progress-1: progress
   }
@@ -154,17 +176,19 @@ const handleResize = () => {
   const [overlay, setOverlay] = useState(null)
 
   return (
-    <div className="App" onLoad={handleResize()} >
+    <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{spacebar(e)}}> 
     <button className="button-left" onMouseDown={left} onMouseUp={stop} onTouchStart={left} onTouchEnd={stop}>
     </button>
-    <div className="field" style={{backgroundPosition: progress+modifier+"vw"}}>
-      <div className="mask" onTouchStart={jump} onMouseDown={jump}>
-      </div>
+    <div className="field" style={{backgroundPosition: progress+modifier+"vw"}} >
+      <button className="mask" onTouchStart={jump} onMouseDown={jump}>
+      </button>
       <section className='health-bar' style={{width: health+'vw'}}></section>
       <section className={'action-box '+items.filter((item)=>{return item.name===activeItem})[0].className} onClick={items.filter((item)=>{return item.name===activeItem})[0].method} style={{}}></section>
       <figure className={playerClass} style={{left: pos[0]+'vw', top: pos[1]+"vh"}}> 
       </figure>
       {snowmen.map((obj)=>{return obj})}
+      {gumdrops.map((obj)=>{return obj})}
+      {gingers.map((obj)=>{return obj})}
       {objects.map((obj)=>{return <div className="active candy-cane-missile" style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
     </div>
     <button className="button-right" onMouseDown={right} onMouseUp={stop} onTouchStart={right} onTouchEnd={stop}>

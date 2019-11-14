@@ -94,14 +94,25 @@ body {
   z-index: 2;
 }
 
-.snowman {
+.snowman, .gumdrop, .ginger  {
   position: absolute;
   width: 6vw;
   height: 6vw;
-  background-image: url('resources/images/snowman.gif');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.snowman {
+  background-image: url('resources/images/snowman.gif');
+}
+
+.gumdrop {
+  background-image: url('resources/images/gumdrop.png');
+}
+
+.ginger {
+  background-image: url('resources/images/ginger.gif');
 }
 
 .alt {
@@ -133,6 +144,8 @@ body {
   height: 73vh;
   z-index: 1;
   position: fixed;
+  left:0; 
+  background-color: transparent;
 }
 
 .menu {
