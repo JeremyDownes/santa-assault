@@ -94,18 +94,18 @@ body {
   z-index: 2;
 }
 
-.skeleton {
+.snowman {
   position: absolute;
   width: 6vw;
   height: 6vw;
-  background-image: url('resources/images/skeleton.gif');
+  background-image: url('resources/images/snowman.gif');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .alt {
-  background-image: url('resources/images/skeleton-alt.gif');
+  background-image: url('resources/images/snowman-alt.gif');
 }
 
 .health-bar {

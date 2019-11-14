@@ -14,50 +14,55 @@ import './App.css';
   var health = 20
   var pos = [0,54]
   var position = [0,54]
-  var skeleton = 0
-  var twentyone = 0
+  var direction = "right"
   var progress = 0
   var activeItem = "Candy Cane"
   var objects = []
-  var obstacles = [{name: "skeleton",position: [100,54]},{name: "skeleton",position: [250,54]},{name: "skeleton",position: [375,54]},{name: "skeleton",position: [500,54]}]
+  var obstacles = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [250,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0}]
 
 function App() {
   objects = objects.filter((obstacle)=>{return obstacle!==null})
   obstacles = obstacles.filter((obstacle)=>{return obstacle!==null})
-  var snowmen = obstacles.map((obstacle)=>{return <figure className={twentyone>=80?'skeleton':'skeleton alt'} style={{left: obstacle.position[0]+(skeleton/4)+progress+modifier+"vw", top: "54vh"}}></figure>})
+  var snowmen = obstacles.map((obstacle)=>{return <figure className='snowman' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
 
   useEffect(()=>{
     if(health===0){window.location.reload()}
-
-    // console.log(lift)
-     //console.log(action)
+    console.log(progress)
+    //console.log(action)
     // console.log(moving)
-      obstacles.forEach((obstacle,index)=>{
-    if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
-      health-=1
-    }
-    objects.forEach((obj,index)=>{
-      if(obj) {
-
-        if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
-        if(obj.range<=0){objects[index]=null}
-        if (obstacle.position[0] <= obj.position[0]-progress +2 && obstacle.position[0] >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
+    obstacles.forEach((obstacle,index)=>{
+      if(obstacle) {
+        obstacles[index].position = [obstacle.position[0]+.25*obstacle.flip,obstacle.position[1]]
+        obstacle.count++
+      if(obstacle.count===obstacle.range) {
+        obstacle.flip*=-1
+        obstacle.count=0
+      }
+      if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
+        health-=1
+      }
+      objects.forEach((obj,index)=>{
+        if(obj) {
+          if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
+          if(obj.range<=0){objects[index]=null}
+          if (obstacle.position[0]+modifier <= obj.position[0]-progress  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
             obstacles[index]=null
             objects[index]=null
           }
-        }
+         }
       })
+    }
   })
 
   if(lift>0&&lift<=maxJump) {
     y = y-5/lift
-    modifier = x===20&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
+    modifier = x===10&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
     lift++
     lift=lift%15
   }
   if(lift===0) {
     if(y<54){
-      modifier = x===20&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
+      modifier = x===10&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
       y+=(.04*fall)<maxFall?.04*fall: maxFall
 
       if(y>=54){
@@ -72,23 +77,16 @@ function App() {
     if(x<50){x++}
   } 
   if(moving==="left") {
-    if(x>20){x--}
+    if(x>10){x--}
   } 
 })
 
 
   setTimeout(()=>{
-    if(twentyone<=80) {
-      skeleton++
-    } else {
-      skeleton--
-    }
-    twentyone++
-    twentyone%=162
     if(pos[0]!==x||pos[1]!==y) {
       pos=[x,y]
     } else {
-      if((x===50 || x===20)&&moving) {scroll()}
+      if((x===50 || x===10)&&moving) {scroll()}
     }
     objects.forEach((object)=>{
       if(object){
@@ -117,11 +115,13 @@ const handleResize = () => {
 
   const left = () => {
     moving="left" 
+    direction = "left"
     playerClass="player run-left"
   }
 
   const right = () => {
     moving="right" 
+    direction = "right"
     playerClass="player run-right"
   }
 
@@ -132,6 +132,7 @@ const handleResize = () => {
 
   const jump = () => {
     playerClass = playerClass==="player run-left"? "player jump-left" : "player jump-right"
+
     if(lift===maxJump){ lift = 0} else {lift++}
     if(!moving) {
       moving="jump"
@@ -143,7 +144,7 @@ const handleResize = () => {
   }
 
   var candyCane = () => {
-    objects.push({position:pos,direction:moving,range:20})
+    objects.push({position:[pos[0],pos[1]-.5],direction:direction,range:20})
   }
 
   window.addEventListener('resize', handleResize);
