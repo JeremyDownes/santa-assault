@@ -45,7 +45,7 @@ function App() {
         if(obj) {
           if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
           if(obj.range<=0){objects[index]=null}
-          if (obstacle.position[0]+modifier <= obj.position[0]-progress  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
+          if (obstacle.position[0]+modifier <= obj.position[0]-progress +2  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
             obstacles[index]=null
             objects[index]=null
           }
