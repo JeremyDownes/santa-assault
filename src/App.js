@@ -2,59 +2,64 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
   var lift = 0
-  var maxJump = 20
+  var maxJump = 7
   var x=9
   var y=54
   var floor = 54
-  var playerClass = "player stand-right"
+  var playerClass = "player right"
   var moving = null
   var modifier = 0
   var fall = 0
-  var maxFall = 5
+  var maxFall = 7
   var health = 20
   var pos = [0,54]
   var position = [0,54]
   var direction = "right"
   var progress = 0
   var activeItem = "Candy Cane"
+  var airborn = false
   var objects = []
-  var obstacles = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [650,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [150,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [950,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [350,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [650,54],range:80,flip: 1,count: 0},{name: "ginger",position: [250,54],range:80,flip: 1,count: 0},{name: "ginger",position: [400,54],range:80,flip: 1,count: 0},{name: "ginger",position: [700,54],range:80,flip: 1,count: 0},]
+  var enemys = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [650,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [150,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [950,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [350,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [650,54],range:80,flip: 1,count: 0},{name: "ginger",position: [250,54],range:80,flip: 1,count: 0},{name: "ginger",position: [400,54],range:80,flip: 1,count: 0},{name: "ginger",position: [700,54],range:80,flip: 1,count: 0},]
+  var blocks = [{name: "platform",position: [100,50]},{name: "platform",position: [101,50]},{name: "platform",position: [102,50]},{name: "platform",position: [103,50]},{name: "platform",position: [106,40]},{name: "platform",position: [105,40]},{name: "platform",position: [108,40]},{name: "platform",position: [107,40]},]
+  var init = 0
 
 function App() {
+  if(init<=2) {
+    playerClass = init===0?"player right jump":init===1?"player right run":"player right"
+    init++
+  }
+  objects = objects.filter((enemy)=>{return enemy!==null})
+  enemys = enemys.filter((enemy)=>{return enemy!==null})
 
-  objects = objects.filter((obstacle)=>{return obstacle!==null})
-  obstacles = obstacles.filter((obstacle)=>{return obstacle!==null})
-
-  var snowmen = obstacles.filter((obstacle)=>{return obstacle.name==="snowman"})
-  snowmen = snowmen.map((obstacle)=>{return <figure className='snowman' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var gingers = obstacles.filter((obstacle)=>{return obstacle.name==="ginger"})
-  gingers = gingers.map((obstacle)=>{return <figure className='ginger' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh", transform: obstacle.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var gumdrops = obstacles.filter((obstacle)=>{return obstacle.name==="gumdrop"})
-  gumdrops = gumdrops.map((obstacle)=>{return <figure className='gumdrop' style={{left: obstacle.position[0]+progress+modifier+"vw", top: "54vh"}}></figure>})
+  var snowmen = enemys.filter((enemy)=>{return enemy.name==="snowman"})
+  snowmen = snowmen.map((enemy)=>{return <figure className='snowman' style={{left: enemy.position[0]+progress+modifier+"vw", top: "54vh", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
+  var gingers = enemys.filter((enemy)=>{return enemy.name==="ginger"})
+  gingers = gingers.map((enemy)=>{return <figure className='ginger' style={{left: enemy.position[0]+progress+modifier+"vw", top: "54vh", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
+  var gumdrops = enemys.filter((enemy)=>{return enemy.name==="gumdrop"})
+  gumdrops = gumdrops.map((enemy)=>{return <figure className='gumdrop' style={{left: enemy.position[0]+progress+modifier+"vw", top: "54vh"}}></figure>})
 
   useEffect(()=>{
     if(health===0){window.location.reload()}
-    console.log(progress)
     //console.log(action)
     // console.log(moving)
-    obstacles.forEach((obstacle,index)=>{
-      if(obstacle) {
+    enemys.forEach((enemy,index)=>{
+      if(enemy) {
 
-        if(obstacle.name==='gumdrop') {
-          if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
+        if(enemy.name==='gumdrop') {
+          if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +6 ) {
             pos=[pos[0]-1,pos[1]]
           }
         }
 
 
-        if(obstacle.name==='snowman'||obstacle.name==='ginger') {
-          obstacles[index].position = [obstacle.position[0]+.25*obstacle.flip,obstacle.position[1]]
-          obstacle.count++
-          if(obstacle.count===obstacle.range) {
-            obstacle.flip*=-1
-            obstacle.count=0
+        if(enemy.name==='snowman'||enemy.name==='ginger') {
+          enemys[index].position = [enemy.position[0]+.25*enemy.flip,enemy.position[1]]
+          enemy.count++
+          if(enemy.count===enemy.range) {
+            enemy.flip*=-1
+            enemy.count=0
           }
-          if( obstacle.position[0] <= position[0] +2 && obstacle.position[0] >= position[0] -1 && obstacle.position[1] >= position[1] && obstacle.position[1] <= position[1] +6 ) {
+          if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +6 ) {
             health-=1
           }
 
@@ -62,8 +67,8 @@ function App() {
           if(obj) {
             if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
             if(obj.range<=0){objects[index]=null}
-            if (obstacle.position[0]+modifier <= obj.position[0]-progress +2  && obstacle.position[0]+modifier >= obj.position[0]-progress -1 && obstacle.position[1] >= obj.position[1]&& obstacle.position[1] <= obj.position[1] +6){//can use obstacle.height / width
-              obstacles[index]=null
+            if (enemy.position[0]+modifier <= obj.position[0]-progress +2  && enemy.position[0]+modifier >= obj.position[0]-progress -1 && enemy.position[1] >= obj.position[1]&& enemy.position[1] <= obj.position[1] +6){//can use enemy.height / width
+              enemys[index]=null
               objects[index]=null
             }
            }
@@ -72,21 +77,37 @@ function App() {
     }
   })
 
+  let landed = blocks.filter((block)=>{return block.position[0]===position[0]+4&&block.position[1]>=Math.floor(position[1]-13)})
   if(lift>0&&lift<=maxJump) {
-    y = y-5/lift
+    airborn = true
+    y = y-7/lift
     modifier = x===10&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
     lift++
-    lift=lift%15
+    lift=lift%maxJump
   }
   if(lift===0) {
     if(y<54){
       modifier = x===10&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
-      y+=(.04*fall)<maxFall?.04*fall: maxFall
-
-      if(y>=54){
-        y=54
-        if(moving==='jump'){stop()}
-        playerClass = playerClass==="player jump-left"? "player run-left" : playerClass==="player jump-right"?"player run-right" : "player stand-right"
+      if(landed.length>0){
+        if (landed[0].position[1]>=y+.5) {
+         landed = [] 
+        } else {
+          y=landed[0].position[1]
+          fall=0
+        }
+      }
+      landed = landed.length===1?true:false
+      if(!landed){ y+=(.5*fall)<maxFall?.5*fall: maxFall}
+      if(y>=54||landed){
+        airborn = false
+        if(y>=54){y=54}
+        fall = 0
+        lift = 0
+        airborn = false
+        if(moving==='jump'||moving===''){stop()} else {          
+          playerClass = 'player run '
+          playerClass += direction
+        }
       }
       fall++
     }
@@ -98,7 +119,6 @@ function App() {
     if(x>10){x--}
   } 
 })
-
 
   setTimeout(()=>{
     if(pos[0]!==x||pos[1]!==y) {
@@ -134,31 +154,51 @@ const handleResize = () => {
   const left = () => {
     moving="left" 
     direction = "left"
-    playerClass="player run-left"
+    playerClass="player run left"
   }
 
   const right = () => {
     moving="right" 
     direction = "right"
-    playerClass="player run-right"
+    playerClass="player run right"
   }
 
   const stop = () => {
-    playerClass = moving==='left'? 'player stand-left' : 'player stand-right'
-    moving=null
+    playerClass = "player "+direction
+    moving=''
   }
 
   const jump = () => {
-    playerClass = playerClass==="player run-left"? "player jump-left" : "player jump-right"
-
-    if(lift===maxJump){ lift = 0} else {lift++}
-    if(!moving) {
-      moving="jump"
-    }  
+    if (lift===0&&!airborn){
+      playerClass = playerClass+=" jump"
+      if(lift>=maxJump){ alert()} else {lift++}
+      if(!moving) {
+        moving="jump"
+      }  
+    }
   }
 
-  const spacebar = (e) => {
+  const keyDown = (e) => {
+    if(e.keyCode===13){candyCane() }
     if(e.keyCode===32){jump() }
+    if(e.keyCode===39){right() }
+    if(e.keyCode===37){left() }  
+    if(e.keyCode===38){ } //up
+    if(e.keyCode===40){ }  //down
+  }
+
+const keyUp = (e) => {
+    if(e.keyCode===32){jump() }
+    if(e.keyCode===39) {
+      moving=''
+      stop()
+    }
+    if(e.keyCode===37) {
+      moving=''
+      stop()
+    }
+    if(e.keyCode===38){ } //up
+    if(e.keyCode===40){ }  //down
   }
 
   const scroll = () => {
@@ -176,7 +216,7 @@ const handleResize = () => {
   const [overlay, setOverlay] = useState(null)
 
   return (
-    <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{spacebar(e)}}> 
+    <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{keyDown(e)}} onKeyUp={(e)=>{keyUp(e)}}> 
     <button className="button-left" onMouseDown={left} onMouseUp={stop} onTouchStart={left} onTouchEnd={stop}>
     </button>
     <div className="field" style={{backgroundPosition: progress+modifier+"vw"}} >
@@ -190,6 +230,7 @@ const handleResize = () => {
       {gumdrops.map((obj)=>{return obj})}
       {gingers.map((obj)=>{return obj})}
       {objects.map((obj)=>{return <div className="active candy-cane-missile" style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
+      {blocks.map((obj)=>{return <div className="block" style={{left: obj.position[0]+progress+modifier+'vw', top: obj.position[1]+"vh"}}></div>})}
     </div>
     <button className="button-right" onMouseDown={right} onMouseUp={stop} onTouchStart={right} onTouchEnd={stop}>
     </button>

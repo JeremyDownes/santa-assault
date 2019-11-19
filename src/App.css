@@ -16,12 +16,6 @@ body {
   min-height:73vh;
 }
 
-.player {
-  height: 6vw;
-  width: 6vw;
-  position: absolute;
-}
-
 .button-left {
   position: fixed;
   left: 1vw;
@@ -53,34 +47,28 @@ body {
   background-size: cover;
 }
 
-.stand-right {
- background-image: url('resources/images/standing-right.gif'); 
- background-size: cover;
+.player {
+  height: 6vw;
+  width: 6vw;
+  position: absolute;
+  background-image: url('resources/images/standing-right.gif'); 
+  background-size: cover;
 }
 
-.run-right {
+.left {
+ transform: rotateY(180deg);
+}
+
+.right {
+ transform: rotateY(0deg);
+}
+
+.run {
  background-image: url('resources/images/running-right.gif'); 
- background-size: cover;
 }
 
-.stand-left {
- background-image: url('resources/images/standing-left.gif'); 
- background-size: cover;
-}
-
-.run-left {
- background-image: url('resources/images/running-left.gif'); 
- background-size: cover;
-}
-
-.jump-left {
- background-image: url('resources/images/jump-left.gif'); 
- background-size: cover;
-}
-
-.jump-right {
+.jump {
  background-image: url('resources/images/jump-right.gif'); 
- background-size: cover;
 }
 
 .overlay {
@@ -145,7 +133,7 @@ body {
   z-index: 1;
   position: fixed;
   left:0; 
-  background-color: transparent;
+  background-color: transparent;  
 }
 
 .menu {
@@ -178,6 +166,15 @@ body {
   background-size: cover;
   position: absolute;
   z-index: 3;
+}
+
+.block {
+  height: 1vw;
+  width: 1vw;
+  position: absolute;
+  background-color: rgba(0,128,255,.4);
+  box-shadow:0vw 0vw .2vw .2vw rgba(255,255,255,0.8) inset;
+  transform: translateY(13.5vh);
 }
 
 .candy-cane-missile {
