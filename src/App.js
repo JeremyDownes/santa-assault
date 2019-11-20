@@ -21,13 +21,24 @@ import './App.css';
   var objects = []
   var enemys = [{name: "snowman",position: [100,54],range:80,flip: 1,count: 0},{name: "snowman",position: [650,54],range:80,flip: 1,count: 0},{name: "snowman",position: [375,54],range:80,flip: 1,count: 0},{name: "snowman",position: [500,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [150,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [950,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [350,54],range:80,flip: 1,count: 0},{name: "gumdrop",position: [650,54],range:80,flip: 1,count: 0},{name: "ginger",position: [250,54],range:80,flip: 1,count: 0},{name: "ginger",position: [400,54],range:80,flip: 1,count: 0},{name: "ginger",position: [700,54],range:80,flip: 1,count: 0},]
   var blocks = [{name: "platform",position: [100,50]},{name: "platform",position: [101,50]},{name: "platform",position: [102,50]},{name: "platform",position: [103,50]},{name: "platform",position: [106,40]},{name: "platform",position: [105,40]},{name: "platform",position: [108,40]},{name: "platform",position: [107,40]},]
+  
   var init = 0
+  var snowfall = 0
+  var snowfall2 = 0
+  var flip = 1
 
 function App() {
+
+  flip*=-1
   if(init<=2) {
     playerClass = init===0?"player right jump":init===1?"player right run":"player right"
     init++
   }
+  snowfall++
+  snowfall2++
+  snowfall%=385
+  snowfall2%=730
+
   objects = objects.filter((enemy)=>{return enemy!==null})
   enemys = enemys.filter((enemy)=>{return enemy!==null})
 
@@ -47,13 +58,15 @@ function App() {
 
         if(enemy.name==='gumdrop') {
           if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +6 ) {
-            pos=[pos[0]-1,pos[1]]
+            pos=[pos[0]+moving==="right"?-1:1,pos[1]]
+            moving==="right"?x--:x++
           }
         }
 
 
         if(enemy.name==='snowman'||enemy.name==='ginger') {
           enemys[index].position = [enemy.position[0]+.25*enemy.flip,enemy.position[1]]
+          //enemys[index].position = enemy.name==='ginger'? ginger() : enemys[index].position         do this
           enemy.count++
           if(enemy.count===enemy.range) {
             enemy.flip*=-1
@@ -63,13 +76,15 @@ function App() {
             health-=1
           }
 
-        objects.forEach((obj,index)=>{
+        objects.forEach((obj,ind)=>{
           if(obj) {
-            if(obj.range<=5){objects[index].position=[objects[index].position[0],objects[index].position[1]+.3]}
-            if(obj.range<=0){objects[index]=null}
+            if(obj.range<=5){objects[ind].position=[objects[ind].position[0],objects[ind].position[1]+.3]}
+            if(obj.range<=0){objects[ind]=null}
+            
+
             if (enemy.position[0]+modifier <= obj.position[0]-progress +2  && enemy.position[0]+modifier >= obj.position[0]-progress -1 && enemy.position[1] >= obj.position[1]&& enemy.position[1] <= obj.position[1] +6){//can use enemy.height / width
               enemys[index]=null
-              objects[index]=null
+              objects[ind]=null
             }
            }
         })
@@ -151,6 +166,10 @@ const handleResize = () => {
     }
   }
 
+  const gingerMove = ()=>{
+
+  }
+
   const left = () => {
     moving="left" 
     direction = "left"
@@ -220,7 +239,9 @@ const keyUp = (e) => {
     <button className="button-left" onMouseDown={left} onMouseUp={stop} onTouchStart={left} onTouchEnd={stop}>
     </button>
     <div className="field" style={{backgroundPosition: progress+modifier+"vw"}} >
-      <button className="mask" onTouchStart={jump} onMouseDown={jump}>
+
+      <div className="screen bg" style={{backgroundPosition: progress+modifier+"vw "+snowfall2+"%"}}></div>
+      <button className="screen" onTouchStart={jump} onMouseDown={jump} style={{backgroundPosition: progress+modifier+"vw "+snowfall*2+"%"}}>
       </button>
       <section className='health-bar' style={{width: health+'vw'}}></section>
       <section className={'action-box '+items.filter((item)=>{return item.name===activeItem})[0].className} onClick={items.filter((item)=>{return item.name===activeItem})[0].method} style={{}}></section>
@@ -237,7 +258,8 @@ const keyUp = (e) => {
     <section className="menu">
     {items.map((item)=>{return <div className={"item "+item.className} onClick={()=>{activeItem=item.name}}></div>})}
     </section>
-    {overlay}
+    {overlay} 
+    <div className="blinder"></div>
     </div>
   );
 }
