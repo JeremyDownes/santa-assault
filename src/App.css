@@ -1,3 +1,8 @@
+html *:not[.health-bar] {
+  margin:0!important;
+  width: 0!important;
+}
+
 
 body {  
   overflow-y: hidden;
@@ -6,6 +11,11 @@ body {
   background-color: #282c34;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none;  
+  width: 100vw!important;
+}
+
+#root {
+  width: 100%!important;
 }
 
 .App {
@@ -14,11 +24,12 @@ body {
   text-align: center;
   background-color: #282c34;
   min-height:73vh;
+  width: 100%!important;
 }
 
 .button-left {
   position: fixed;
-  left: 1vw;
+  left: 2vw;
   background-image: url('resources/images/arrow-left.png');
 }
 
@@ -31,7 +42,7 @@ body {
 .button-left, .button-right {
   z-index: 2;
   height: 73vh;
-  width: 9vw;
+  width: 9vw!important;
   background-color: #777;
   background-size: contain;
   background-repeat: no-repeat; 
@@ -39,7 +50,7 @@ body {
 }
 
 .field {
-  width: 80vw;
+  width: 80vw!important;
   height: 73vh;
   z-index: 1;
   position: fixed;
@@ -48,11 +59,13 @@ body {
 }
 
 .player {
-  height: 6vw;
-  width: 6vw;
+  height: calc(var(--vh, 1vh) * 12);
+  width: calc(var(--vh, 1vh) * 12)!important;
   position: absolute;
   background-image: url('resources/images/standing-right.gif'); 
   background-size: cover;
+  margin:0;
+  padding: 0;
 }
 
 .left {
@@ -75,21 +88,26 @@ body {
   position: absolute;
   top:0;
   left:0;
-  width: 100vw;
+  width: 100vw!important;
   height: 100vh;
   color: white;
   background-color: #282c34;
-  z-index: 2;
+  z-index: 4;
 }
 
 .snowman, .gumdrop, .ginger  {
+  margin:0;
   position: absolute;
-  width: 6vw;
+  width: 6vw!important;
   height: 6vw;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.gift {
+  background-image: url('resources/images/gift.gif');
+}  
 
 .snowman {
   background-image: url('resources/images/snowman.gif');
@@ -113,23 +131,27 @@ body {
   top: 2vh;
   left: 2vw;
   height: 2vh;
+  width: var(--life, 20vh)!important;
   background-color: red;
 }
 
 .action-box {
   border: 1px solid black;
   height: 7vw;
-  width: 7vw;
+  width: 7vw!important;
   position: absolute;
   top: 2vh;
   right: 2vw;
   border-radius: 10%;
-  z-index: 2;
+  z-index: 2
+
+  ;
   background-size: cover;
 }
 
+
 .screen {
-  width: 90%;
+  width: 90%!important;
   height: 73vh;
   z-index: 1;
   position: fixed;
@@ -144,12 +166,13 @@ body {
 }
 
 .blinder {
-  position: absolute;
+  margin: 0;
+  position: fixed;
   top:0;
   left: 0;
   border-left: 1vw solid #282c34;
   border-right: 1vw solid #282c34;
-  width: 98vw;
+  width: 98vw!important;
   height: 100%;
   z-index: 3;
   pointer-events: none;
@@ -157,9 +180,9 @@ body {
 
 .menu {
   height: 20vh;
-  width: 98vw;
+  width: 98vw!important;
   background-color: #555;
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: 74vh;
   display: flex;
@@ -170,9 +193,16 @@ body {
 
 .item {
   height: 7vw;
-  width: 7vw;
+  width: 7vw!important;
   border-radius: 10%;
   background-size: cover;
+}
+
+.fieldItem {
+  height: 3vw;
+  width: 3vw!important;
+  background-size: cover;  
+  position: absolute;
 }
 
 .candy-cane {
@@ -181,25 +211,29 @@ body {
 
 .active {
  height: 3vw;
-  width: 3vw;
+  width: 3vw!important;
   background-size: cover;
   position: absolute;
   z-index: 3;
 }
 
-.block {
+.platform {
   height: 1vw;
-  width: 1vw;
-  position: absolute;
+  width: 1vw!important;
+  position: fixed;
   background-color: rgba(0,128,255,.4);
   box-shadow:0vw 0vw .2vw .2vw rgba(255,255,255,0.8) inset;
-  transform: translateY(13.5vh);
+  transform: translateX(13vw);
 }
 
 .candy-cane-missile {
   animation: rotateZ 1s;
   background-image: url('resources/images/candy-cane.png'); 
   border-radius: 50%;
+}
+
+.gift-missile {
+ background-image: url('resources/images/gift.gif');   
 }
 
 @keyframes rotateZ {
