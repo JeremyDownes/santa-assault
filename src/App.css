@@ -95,7 +95,7 @@ body {
   z-index: 4;
 }
 
-.snowman, .gumdrop, .ginger  {
+.snowman, .gumdrop, .ginger, .badKid  {
   margin:0;
   position: absolute;
   width: 6vw!important;
@@ -103,6 +103,15 @@ body {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.snowball {
+  width: 1vw;
+  height: 1vw;
+  background-color: white;
+  position: absolute;
+  transform: translateY(6vh);
+  border-radius: 50%;
 }
 
 .gift {
@@ -119,6 +128,10 @@ body {
 
 .ginger {
   background-image: url('resources/images/ginger.gif');
+}
+
+.badKid {
+  background-image: url('resources/images/badKid-left.gif');
 }
 
 .alt {
@@ -143,9 +156,7 @@ body {
   top: 2vh;
   right: 2vw;
   border-radius: 10%;
-  z-index: 2
-
-  ;
+  z-index: 2;
   background-size: cover;
 }
 
@@ -210,7 +221,7 @@ body {
 }
 
 .active {
- height: 3vw;
+  height: 3vw;
   width: 3vw!important;
   background-size: cover;
   position: absolute;
