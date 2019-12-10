@@ -53,6 +53,7 @@ function App() {
   snowfall2%=730
 
   objects = objects.filter((enemy)=>{return enemy!==null})
+  if(snowballs){snowballs = snowballs.filter((enemy)=>{return enemy!==null})}else{snowballs=[]}
   enemys = enemys.filter((enemy)=>{return enemy!==null}) 
 
   var snowmen = enemys.filter((enemy)=>{return enemy.name==="snowman"})
@@ -65,7 +66,7 @@ function App() {
   gumdrops = gumdrops.map((enemy)=>{return <figure className='gumdrop' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
 
   useEffect(()=>{
-    if(health===0){window.location.reload()}
+    if(health<=0){window.location.reload()}
     //console.log(action)
     // console.log(moving)
     itemLocations.forEach((location,index)=>{
@@ -104,8 +105,8 @@ function App() {
             enemy.flip*=-1
             enemy.count=0
           }
-          if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +6 ) {
-            health-=1
+          if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +8 ) {
+            health-=enemy.damage
           }
         }
 
@@ -114,22 +115,23 @@ function App() {
             if(obj.range<=5){objects[ind].position=[objects[ind].position[0],objects[ind].position[1]+.3]}
             if(obj.range<=0){objects[ind]=null}
             if (enemy.position[0]+modifier <= obj.position[0]-progress  && enemy.position[0]+modifier >= obj.position[0]-progress -2 && enemy.position[1] >= obj.position[1]&& enemy.position[1] <= obj.position[1] +6){//can use enemy.height / width
-              enemys[index]=null
+              enemy.health--
               objects[ind]=null
+              if(enemy.health<=0){enemys[index]=null}
             }
            }
         })
 
-        snowballs.forEach((obj,ind)=>{
+        if(snowballs){snowballs.forEach((obj,ind)=>{
           if(obj) {
-            if(obj.range<=5){snowballs[ind].position=[snowballs[ind].position[0],snowballs[ind].position[1]+.3]}
-            if(obj.range<=0){snowballs=snowballs.slice(1,-1)}
+            if(obj.range<=5){if(snowballs[ind]){obj.position=[obj.position[0],obj.position[1]+.3]}}
+            if(obj.range<=0){snowballs.splice(ind,1);if(snowballs){snowballs = snowballs.filter((enemy)=>{return enemy!==null})}else{snowballs=[]};return }
             if (pos[0] <= obj.position[0] -1  && pos[0] >= obj.position[0] -4 && position[1] >= obj.position[1] && position[1] <= obj.position[1] +6){//can use enemy.height / width
-              health--
-              snowballs=snowballs.slice(1,-1)
+              health-=1
+              snowballs.splice(ind,1)
             }
            }
-        })
+        })}
       }
     }
   })
@@ -184,12 +186,13 @@ function App() {
     } else {
       if((x===50 || x===10)&&moving) {scroll()}
     }
+    if(snowballs) {
     snowballs.forEach((snowball)=>{
       if(snowball){
         snowball.range--
         snowball.position[0] += snowball.direction==='left'?-2:2
       }
-    })
+    })}
     objects.forEach((object)=>{
       if(object){
         object.range--
