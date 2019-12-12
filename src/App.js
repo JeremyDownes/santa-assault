@@ -22,14 +22,15 @@ import enemies from './resources/collections/enemys.js'
   var airborn = false
   var objects = []
   var snowballs = []
-  var itemLocations = [{name:"Gift",className:"gift",position: [142,30],method:'gift'}]
-  var enemys = enemies//[{name: "snowman",position: [100,58],range:80,flip: 1,count: 0},{name: "snowman",position: [650,58],range:80,flip: 1,count: 0},{name: "snowman",position: [375,58],range:80,flip: 1,count: 0},{name: "snowman",position: [500,58],range:80,flip: 1,count: 0},{name: "gumdrop",position: [150,58],range:80,flip: 1,count: 0},{name: "gumdrop",position: [950,58],range:80,flip: 1,count: 0},{name: "gumdrop",position: [350,58],range:80,flip: 1,count: 0},{name: "gumdrop",position: [650,58],range:80,flip: 1,count: 0},{name: "ginger",position: [250,58],range:80,flip: 1,count: 0},{name: "ginger",position: [400,58],range:80,flip: 1,count: 0},{name: "ginger",position: [700,58],range:80,flip: 1,count: 0},]
-  //var platforms = [{name: "platform",position: [100,50]},{name: "platform",position: [101,50]},{name: "platform",position: [102,50]},{name: "platform",position: [103,50]},{name: "platform",position: [115,40]},{name: "platform",position: [114,40]},{name: "platform",position: [113,40]},{name: "platform",position: [112,40]},{name: "platform",position: [111,40]},{name: "platform",position: [110,40]},{name: "platform",position: [109,40]},{name: "platform",position: [108,40]},{name: "platform",position: [107,40]},{name: "platform",position: [128,25]},{name: "platform",position: [129,25]},{name: "platform",position: [130,25]},{name: "platform",position: [131,25]},{name: "platform",position: [132,25]},{name: "platform",position: [133,25]},{name: "platform",position: [134,25]},{name: "platform",position: [135,25]},{name: "platform",position: [136,25]},{name: "platform",position: [137,25]},{name: "platform",position: [138,25]},{name: "platform",position: [139,25]},{name: "platform",position: [140,25]},{name: "platform",position: [141,25]},{name: "platform",position: [142,25]},]
+  var itemLocations = [{name:"Gift",className:"gift",position: [142,30],method:'gift',count: 5}]
+  var enemys = enemies
   var init = 0
   var snowfall = 0
   var snowfall2 = 0
   var flip = 1
   var inventory = [{name:"Candy Cane",className:"candy-cane",method:'candyCane'}]
+  var falling = false
+  var hit = ''
 
   let vh = window.innerHeight * 0.01
   let vw = window.innerWidth * 0.01
@@ -41,6 +42,7 @@ import enemies from './resources/collections/enemys.js'
 
 function App() {
   document.documentElement.style.setProperty('--life', `${health}vw`);
+  //hit = ''
 
   flip*=-1
   if(init<=2) {
@@ -61,9 +63,11 @@ function App() {
   var gingers = enemys.filter((enemy)=>{return enemy.name==="ginger"})
   gingers = gingers.map((enemy)=>{return <figure className='ginger' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
   var badKids = enemys.filter((enemy)=>{return enemy.name==="badKid"})
-  badKids = badKids.map((enemy)=>{return <figure className='badKid' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", }}></figure>})
+  badKids = badKids.map((enemy)=>{return <figure className={'badKid '+enemy.direction } style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", }}></figure>})
   var gumdrops = enemys.filter((enemy)=>{return enemy.name==="gumdrop"})
   gumdrops = gumdrops.map((enemy)=>{return <figure className='gumdrop' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
+  var blackIces = enemys.filter((enemy)=>{return enemy.name==="blackIce"})
+  blackIces = blackIces.map((enemy)=>{return <figure className='black-ice' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
 
   useEffect(()=>{
     if(health<=0){window.location.reload()}
@@ -95,8 +99,20 @@ function App() {
           enemy.count%=28
         } 
 
+        if(enemy.name==='blackIce') {
+          if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] +10 && enemy.position[1] <= position[1] + 11 ) {
+              stop()
+            if(!falling&&moving!=='jump'){
+              health-=1
+              falling=true
+            }
+          }
+          else {
+            //falling = false
+          }
+        }
 
-        if(enemy.name!='gumdrop') {
+        if(enemy.name!=='gumdrop'&&enemy.name!=='blackIce') {
           if(enemy.name==='snowman'||enemy.name==='ginger') {
           enemys[index].position = [enemy.position[0]+.25*enemy.flip,enemy.position[1]]
           //enemys[index].position = enemy.name==='ginger'? ginger() : enemys[index].position         do this
@@ -107,6 +123,7 @@ function App() {
           }
           if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +8 ) {
             health-=enemy.damage
+            hit='hit'
           }
         }
 
@@ -115,8 +132,9 @@ function App() {
             if(obj.range<=5){objects[ind].position=[objects[ind].position[0],objects[ind].position[1]+.3]}
             if(obj.range<=0){objects[ind]=null}
             if (enemy.position[0]+modifier <= obj.position[0]-progress  && enemy.position[0]+modifier >= obj.position[0]-progress -2 && enemy.position[1] >= obj.position[1]&& enemy.position[1] <= obj.position[1] +6){//can use enemy.height / width
-              enemy.health--
+              enemy.health-=obj.damage
               objects[ind]=null
+              if(enemy.name==='badKid'&&obj.itemClassName==='gift') {enemys[index]=null}
               if(enemy.health<=0){enemys[index]=null}
             }
            }
@@ -128,7 +146,9 @@ function App() {
             if(obj.range<=0){snowballs.splice(ind,1);if(snowballs){snowballs = snowballs.filter((enemy)=>{return enemy!==null})}else{snowballs=[]};return }
             if (pos[0] <= obj.position[0] -1  && pos[0] >= obj.position[0] -4 && position[1] >= obj.position[1] && position[1] <= obj.position[1] +6){//can use enemy.height / width
               health-=1
+              hit='snowhit'
               snowballs.splice(ind,1)
+              setTimeout(()=>{hit=''},200)
             }
            }
         })}
@@ -178,6 +198,11 @@ function App() {
   if(moving==="left") {
     if(x>10){x--}
   } 
+
+  if(hit==='hit') {
+    let stillHit = enemys.filter((enemy)=>{return enemy? enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] && enemy.position[1] <= position[1] +8 : null})
+    if(stillHit.length<1){hit = ''}
+  }
 })
 
   setTimeout(()=>{
@@ -223,24 +248,27 @@ const handleResize = () => {
   }
 
   const left = () => {
-    moving="left" 
-    direction = "left"
-    playerClass="player run left"
+
+      moving="left" 
+      direction = "left"
+      playerClass="player run left"
   }
 
   const right = () => {
-    moving="right" 
-    direction = "right"
-    playerClass="player run right"
+      moving="right" 
+      direction = "right"
+      playerClass="player run right"
   }
 
   const stop = () => {
-    playerClass = "player "+direction
+    if(!falling){ playerClass = "player "+direction }
     moving=''
   }
 
   const jump = () => {
+    falling = false 
     if (lift===0&&!airborn){
+      playerClass = playerClass.replace(' falling','')
       playerClass = playerClass+=" jump"
       if(lift>=maxJump){ alert()} else {lift++}
       if(!moving) {
@@ -277,21 +305,15 @@ const keyUp = (e) => {
   }
 
   var candyCane = () => {
-    objects.push({position:[pos[0],pos[1]-.5],direction:direction,range:20})
+    objects.push({damage: 1, itemClassName: 'candy-cane', position:[pos[0],pos[1]-.5],direction:direction,range:20})
   }
 
   var gift = () => {
-    alert()
-    objects.push({position:[pos[0],pos[1]-.5],direction:direction,range:20})
-  }
-
-  const referenceFunction = (str) => {
-    if(str==='gift'){return gift()}
-    if(str==='candyCane'){return candyCane()}  
+    objects.push({damage: 0, itemClassName: 'gift', position:[pos[0],pos[1]-.5],direction:direction,range:30})
   }
 
   const handleItem = (item,index) => {
-    inventory.push({name: item.name,className: item.className,method: referenceFunction(item.name)})
+    inventory.push({name: item.name,className: item.className,method: item.method})
     itemLocations.splice(index,1)
   }
 
@@ -300,8 +322,12 @@ const keyUp = (e) => {
 
   const [action, setAction] = useState(false)
   const [overlay, setOverlay] = useState(null)
-  var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: referenceFunction(item.name)}})
-  var active = () => {return referenceFunction(activeItem.method) }
+  var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method}})
+  var active = () => {eval(activeItem.method+'()')}
+
+  playerClass = playerClass.replace(' falling','')
+  playerClass += falling? ' falling' : ''
+  if(falling){playerClass = playerClass.replace(' run','')}
 
   return (
     <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{keyDown(e)}} onKeyUp={(e)=>{keyUp(e)}}> 
@@ -313,23 +339,25 @@ const keyUp = (e) => {
       <button className="screen" onTouchStart={jump} onMouseDown={jump} style={{backgroundPosition: progress+modifier+"vw "+snowfall*2+"%"}}>
       </button>
       <section className='health-bar' style={{width: health+'vw!important'}}></section>
-      <section className={'action-box '+items.filter((item)=>{return item.name===activeItem.name})[0].className} onClick={active} style={{}}></section>
+      <section className={'action-box '+activeItem.className} onClick={active}>{activeItem.count}</section>
       <figure className={playerClass} style={{left: pos[0]*vw+'px', top: pos[1]*vh+'px'}}> 
+      <div className={hit}></div>
       {position[0]}
       </figure>
       {snowmen.map((obj)=>{return obj})}
       {gumdrops.map((obj)=>{return obj})}
+      {blackIces.map((obj)=>{return obj})}
       {gingers.map((obj)=>{return obj})}
       {badKids.map((obj)=>{return obj})}
       {platforms.map((obj)=>{return <div className="platform" style={{left: obj.position[0]+progress+modifier+'vw', top: (obj.position[1]+11)*vh+"px"}}></div>})}
       {itemLocations.map((obj)=>{return <div className={"fieldItem "+obj.className} style={obj.position?{left: obj.position[0]+progress+modifier+'vw', top: obj.position[1]+"vh"}:null}></div>})}
-      {objects.map((obj)=>{return <div className={"active "+items.filter((item)=>{return item.name===activeItem.name})[0].className+"-missile"} style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
+      {objects.map((obj)=>{return <div className={"active "+obj.itemClassName+"-missile"} style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
       {snowballs.map((obj)=>{return <div className="snowball" style={snowballs[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
     </div>
     <button className="button-right" onMouseDown={right} onMouseUp={stop} onTouchStart={right} onTouchEnd={stop}>
     </button>
     <section className="menu">
-    {items.map((item)=>{return <div className={"item "+item.className} onClick={()=>{activeItem.name=item.name}}></div>})}
+    {items.map((item)=>{return <div className={"item "+item.className} onClick={(e)=>{activeItem=item}}></div>})}
     </section>
     {overlay} 
     <div className="blinder"></div>

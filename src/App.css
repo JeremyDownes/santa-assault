@@ -62,10 +62,11 @@ body {
   height: calc(var(--vh, 1vh) * 12);
   width: calc(var(--vh, 1vh) * 12)!important;
   position: absolute;
-  background-image: url('resources/images/standing-right.gif'); 
+  background-image: url('resources/images/standing.gif'); 
   background-size: cover;
   margin:0;
   padding: 0;
+  z-index: 1;
 }
 
 .left {
@@ -77,11 +78,21 @@ body {
 }
 
 .run {
- background-image: url('resources/images/running-right.gif'); 
+ background-image: url('resources/images/run.gif'); 
 }
 
 .jump {
- background-image: url('resources/images/jump-right.gif'); 
+ background-image: url('resources/images/jump.gif'); 
+}
+
+.falling.right {
+  transition: transform .1s;
+  transform: rotateZ(-90deg) translateX(-50%);
+}
+
+.falling.left {
+  transition: transform .1s;
+  transform: rotateZ(90deg) translateX(50%);
 }
 
 .overlay {
@@ -95,7 +106,7 @@ body {
   z-index: 4;
 }
 
-.snowman, .gumdrop, .ginger, .badKid  {
+.snowman, .gumdrop, .ginger, .badKid, .black-ice  {
   margin:0;
   position: absolute;
   width: 6vw!important;
@@ -105,6 +116,17 @@ body {
   background-repeat: no-repeat;
 }
 
+.gumdrop {
+  z-index: 1;
+}
+
+.black-ice {
+  background-color: black;
+  opacity: .5;
+  border-radius: 15%;
+  height: 1vw;
+}
+
 .snowball {
   width: 1vw;
   height: 1vw;
@@ -112,11 +134,8 @@ body {
   position: absolute;
   transform: translateY(6vh);
   border-radius: 50%;
+  border: 1px solid gray;
 }
-
-.gift {
-  background-image: url('resources/images/gift.gif');
-}  
 
 .snowman {
   background-image: url('resources/images/snowman.gif');
@@ -130,13 +149,18 @@ body {
   background-image: url('resources/images/ginger.gif');
 }
 
+
 .badKid {
   background-image: url('resources/images/badKid-left.gif');
+  transform: rotateY(0deg);
+
 }
 
-.alt {
-  background-image: url('resources/images/snowman-alt.gif');
+
+.badKid.right {
+  background-image: url('resources/images/badKid-right.gif');
 }
+
 
 .health-bar {
   position: absolute;
@@ -153,18 +177,18 @@ body {
   height: 7vw;
   width: 7vw!important;
   position: absolute;
-  top: 2vh;
-  right: 2vw;
+  top: 6vh;
+  left: 2vw;
   border-radius: 10%;
   z-index: 2;
   background-size: cover;
+  background-color: white;
 }
-
 
 .screen {
   width: 90%!important;
   height: 73vh;
-  z-index: 1;
+  z-index: 2;
   position: fixed;
   left:5vw; 
   background-size: contain;
@@ -220,12 +244,24 @@ body {
   background-image: url('resources/images/candy-cane.jpg');
 }
 
+.gift {
+  background-image: url('resources/images/gift.png');
+}  
+
 .active {
   height: 3vw;
   width: 3vw!important;
   background-size: cover;
   position: absolute;
   z-index: 3;
+}
+
+.hit, .snowhit {
+  background-color: rgba(128,0,0,.3);
+  width: 100%;
+  height: 100%;
+  border-radius: 40% 50%;
+  animation: flash 100ms infinite;
 }
 
 .platform {
@@ -235,6 +271,7 @@ body {
   background-color: rgba(0,128,255,.4);
   box-shadow:0vw 0vw .2vw .2vw rgba(255,255,255,0.8) inset;
   transform: translateX(13vw);
+  z-index: 1;
 }
 
 .candy-cane-missile {
@@ -252,4 +289,9 @@ body {
   25% {transform: rotateZ(90deg);background-color: rgba(255,255,255,.7);}
   50% {transform: rotateZ(180deg);background-color: transparent;}
   75% {transform: rotateZ(270deg);background-color: rgba(255,255,255,.7);}
+}
+
+@keyframes flash {
+  from {opacity: 1;}
+  to { opacity: 0;}
 }

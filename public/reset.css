@@ -68,6 +68,7 @@ html * {
 	overflow: visible;
   box-sizing: border-box;
   font-family: Lato;
+  line-height: 0!important;
 }
 
 button {
