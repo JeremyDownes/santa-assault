@@ -183,6 +183,13 @@ body {
   z-index: 2;
   background-size: cover;
   background-color: white;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: .5rem;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: firebrick;
 }
 
 .screen {
@@ -240,6 +247,14 @@ body {
   position: absolute;
 }
 
+.active {
+  height: 3vw;
+  width: 3vw!important;
+  background-size: cover;
+  position: absolute;
+  z-index: 3;
+}
+
 .candy-cane {
   background-image: url('resources/images/candy-cane.jpg');
 }
@@ -248,13 +263,18 @@ body {
   background-image: url('resources/images/gift.png');
 }  
 
-.active {
-  height: 3vw;
-  width: 3vw!important;
-  background-size: cover;
-  position: absolute;
-  z-index: 3;
+.coal-bucket {
+  background-image: url('resources/images/coal-bucket.png');
 }
+
+.coal-missile {
+  height: 1vw;
+  width: 1vw!important;
+  background-image: url('resources/images/coal.png');
+
+  background-size: contain;
+}
+
 
 .hit, .snowhit {
   background-color: rgba(128,0,0,.3);

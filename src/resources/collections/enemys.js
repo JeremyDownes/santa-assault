@@ -3,7 +3,7 @@ var enemies = [
 {name: "snowman",position: [100,58],damage:.2,health:5,range:80,flip: 1,count: 0},
 {name: "snowman",position: [650,58],damage:.2,health:5,range:80,flip: 1,count: 10},
 {name: "snowman",position: [375,58],damage:.2,health:5,range:80,flip: 1,count: 5},
-{name: "snowman",position: [500,58],damage:.2,health:5,range:2000,flip: -1,count: 0},
+{name: "snowman",position: [500,58],damage:.2,health:10,range:2000,flip: -1,count: 0},
 
 {name: "gumdrop",position: [150,58],range:80,flip: 1,count: 0},
 {name: "gumdrop",position: [950,58],range:80,flip: 1,count: 0},

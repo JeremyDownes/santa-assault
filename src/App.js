@@ -22,7 +22,7 @@ import enemies from './resources/collections/enemys.js'
   var airborn = false
   var objects = []
   var snowballs = []
-  var itemLocations = [{name:"Gift",className:"gift",position: [142,30],method:'gift',count: 5}]
+  var itemLocations = [{name:"Gift",className:"gift",position: [142,30],method:'gift',count: 5},{name:"Coal",className:"coal-bucket",position: [225,58],method:'coal',count: 5}]
   var enemys = enemies
   var init = 0
   var snowfall = 0
@@ -310,19 +310,32 @@ const keyUp = (e) => {
 
   var gift = () => {
     objects.push({damage: 0, itemClassName: 'gift', position:[pos[0],pos[1]-.5],direction:direction,range:30})
+    decrementActiveItem('Gift')
+  }
+
+  var coal = () => {
+    objects.push({damage: 3, itemClassName: 'coal', position:[pos[0],pos[1]-.5],direction:direction,range:25})
+    decrementActiveItem('Coal')    
+  }
+
+  const decrementActiveItem = (name) => {
+    activeItem.count--
+    if( activeItem.count <= 0) {
+      inventory=inventory.filter(item=>{return item.name!==name})
+      activeItem={name:"Candy Cane",className:"candy-cane",method:'candyCane'}
+    }
   }
 
   const handleItem = (item,index) => {
-    inventory.push({name: item.name,className: item.className,method: item.method})
+    inventory.push({name: item.name,className: item.className,method: item.method, count: item.count})
     itemLocations.splice(index,1)
   }
-
 
   window.addEventListener('resize', handleResize);
 
   const [action, setAction] = useState(false)
   const [overlay, setOverlay] = useState(null)
-  var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method}})
+  var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method, count: item.count}})
   var active = () => {eval(activeItem.method+'()')}
 
   playerClass = playerClass.replace(' falling','')
@@ -339,7 +352,7 @@ const keyUp = (e) => {
       <button className="screen" onTouchStart={jump} onMouseDown={jump} style={{backgroundPosition: progress+modifier+"vw "+snowfall*2+"%"}}>
       </button>
       <section className='health-bar' style={{width: health+'vw!important'}}></section>
-      <section className={'action-box '+activeItem.className} onClick={active}>{activeItem.count}</section>
+      <section className={'action-box '+activeItem.className} onClick={active}>{activeItem.count? 'x '+activeItem.count:null}</section>
       <figure className={playerClass} style={{left: pos[0]*vw+'px', top: pos[1]*vh+'px'}}> 
       <div className={hit}></div>
       {position[0]}
