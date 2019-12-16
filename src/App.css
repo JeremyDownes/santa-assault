@@ -3,7 +3,6 @@ html *:not[.health-bar] {
   width: 0!important;
 }
 
-
 body {  
   overflow-y: hidden;
   overflow-x: hidden;
@@ -106,7 +105,7 @@ body {
   z-index: 4;
 }
 
-.snowman, .gumdrop, .ginger, .badKid, .black-ice  {
+.snowman, .gumdrop, .ginger, .badKid, .black-ice, .fairy, .elf, .toy  {
   margin:0;
   position: absolute;
   width: 6vw!important;
@@ -114,6 +113,7 @@ body {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 1
 }
 
 .gumdrop {
@@ -149,22 +149,31 @@ body {
   background-image: url('resources/images/ginger.gif');
 }
 
+.fairy {
+  background-image: url('resources/images/fairy.gif');
+  transform: translateY(-5vh)!important;
+}
+
+.elf {
+  background-image: url('resources/images/elf.gif');
+}
+
+.toy {
+  background-image: url('resources/images/toy.gif');
+}
 
 .badKid {
   background-image: url('resources/images/badKid-left.gif');
   transform: rotateY(0deg);
-
 }
-
 
 .badKid.right {
   background-image: url('resources/images/badKid-right.gif');
 }
 
-
 .health-bar {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 2vh;
   left: 2vw;
   height: 2vh;
@@ -259,20 +268,69 @@ body {
   background-image: url('resources/images/candy-cane.jpg');
 }
 
+.cookies {
+  background-image: url('resources/images/cookies.png');
+}
+
 .gift {
   background-image: url('resources/images/gift.png');
 }  
 
+.coke {
+  background-image: url('resources/images/coke.png');
+}  
+
+.salt {
+  background-image: url('resources/images/salt.png');
+}
+
+.nuts {
+  background-image: url('resources/images/nuts.png');
+}
+
+.letter {
+  background-image: url('resources/images/letter.png'); 
+  height: 2vw;
+  width: 2vw!important;
+  transform: translateY(1vw) translateX(.5vw);
+}
+
 .coal-bucket {
   background-image: url('resources/images/coal-bucket.png');
+}
+
+.candy-cane-missile {
+  animation: rotateZ 1s;
+  background-image: url('resources/images/candy-cane.png'); 
+  border-radius: 50%;
+}
+
+.gift-missile {
+ background-image: url('resources/images/gift.gif');   
+}
+
+.salt-missile {
+  height: 2vw;
+  width: 2vw!important;
+  background-image: url('resources/images/salt.png');  
+}
+
+.coke-missile {
+  height: 3vw;
+  width: 3vw!important;
+  background-image: url('resources/images/coke.png');
 }
 
 .coal-missile {
   height: 1vw;
   width: 1vw!important;
   background-image: url('resources/images/coal.png');
+}
 
-  background-size: contain;
+.nut-missile {
+  height: 1vw;
+  width: 1vw!important;
+  background-image: url('resources/images/nut.png');
 }
 
 
@@ -294,14 +352,36 @@ body {
   z-index: 1;
 }
 
-.candy-cane-missile {
-  animation: rotateZ 1s;
-  background-image: url('resources/images/candy-cane.png'); 
-  border-radius: 50%;
+.wall {
+  height: 1vh;
+  width: 1vw!important;
+  position: fixed;
+  background-color: rgba(0,128,255,.4);
+  box-shadow:0vw 0vw .2vh .2vh rgba(255,255,255,0.8) inset;
+  z-index: 1;
+  transform: translateX(13vw) ;
 }
 
-.gift-missile {
- background-image: url('resources/images/gift.gif');   
+.mailbox {
+  position: absolute;
+  top: 5vh;
+  left: 10vw;
+  width: 6vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  z-index: 2;
+}
+
+.mailbox img {
+  width: 50%;
+  padding: 1vw;
+}
+
+.mailbox span {
+  white-space: nowrap!important;
+  color: green;
 }
 
 @keyframes rotateZ {
