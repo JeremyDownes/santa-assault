@@ -45,6 +45,9 @@ import itemLocations from './resources/collections/items.js'
 
 function App() {
   document.documentElement.style.setProperty('--life', `${health}vw`);
+  let platformRender = platforms.filter((platform)=>{return Math.abs(platform[0]-position[0])<80})
+  let wallsRender = walls.filter((wall)=>{return Math.abs(wall[0]-position[0])<80})
+  let itemLocationsRender = itemLocations.filter((item)=>{return Math.abs(item.position[0]-position[0])<80})
   //hit = ''
 
   flip*=-1
@@ -56,26 +59,27 @@ function App() {
   snowfall2++
   snowfall%=385
   snowfall2%=730
+  let isActive = false
 
   objects = objects.filter((enemy)=>{return enemy!==null})
   if(snowballs){snowballs = snowballs.filter((enemy)=>{return enemy!==null})}else{snowballs=[]}
   enemys = enemys.filter((enemy)=>{return enemy!==null}) 
 
-  var snowmen = enemys.filter((enemy)=>{return enemy.name==="snowman"})
+  var snowmen = enemys.filter((enemy)=>{return enemy.name==="snowman"&&Math.abs(enemy.position[0]-position[0])<80})
   snowmen = snowmen.map((enemy)=>{return <figure className='snowman' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})  
-  var fairies = enemys.filter((enemy)=>{return enemy.name==="fairy"})
+  var fairies = enemys.filter((enemy)=>{return enemy.name==="fairy"&&Math.abs(enemy.position[0]-position[0])<80})
   fairies = fairies.map((enemy)=>{return <figure className='fairy' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var elves = enemys.filter((enemy)=>{return enemy.name==="elf"})
+  var elves = enemys.filter((enemy)=>{return enemy.name==="elf"&&Math.abs(enemy.position[0]-position[0])<80})
   elves = elves.map((enemy)=>{return <figure className='elf' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var toys = enemys.filter((enemy)=>{return enemy.name==="toy"})
+  var toys = enemys.filter((enemy)=>{return enemy.name==="toy"&&Math.abs(enemy.position[0]-position[0])<80})
   toys = toys.map((enemy)=>{return <figure className='toy' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var gingers = enemys.filter((enemy)=>{return enemy.name==="ginger"})
+  var gingers = enemys.filter((enemy)=>{return enemy.name==="ginger"&&Math.abs(enemy.position[0]-position[0])<80})
   gingers = gingers.map((enemy)=>{return <figure className='ginger' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", transform: enemy.flip===1? "rotateY(180deg)" : "rotateY(0deg)"}}></figure>})
-  var badKids = enemys.filter((enemy)=>{return enemy.name==="badKid"})
+  var badKids = enemys.filter((enemy)=>{return enemy.name==="badKid"&&Math.abs(enemy.position[0]-position[0])<80})
   badKids = badKids.map((enemy)=>{return <figure className={'badKid '+enemy.direction } style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px", }}></figure>})
-  var gumdrops = enemys.filter((enemy)=>{return enemy.name==="gumdrop"})
+  var gumdrops = enemys.filter((enemy)=>{return enemy.name==="gumdrop"&&Math.abs(enemy.position[0]-position[0])<80})
   gumdrops = gumdrops.map((enemy)=>{return <figure className='gumdrop' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
-  var blackIces = enemys.filter((enemy)=>{return enemy.name==="blackIce"})
+  var blackIces = enemys.filter((enemy)=>{return enemy.name==="blackIce"&&Math.abs(enemy.position[0]-position[0])<80})
   blackIces = blackIces.map((enemy)=>{return <figure className='black-ice' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
 
   useEffect(()=>{
@@ -115,9 +119,11 @@ function App() {
         if(enemy.name==='blackIce') {
           if( enemy.position[0] <= position[0] +2 && enemy.position[0] >= position[0] -1 && enemy.position[1] >= position[1] +10 && enemy.position[1] <= position[1] + 11 ) {
               stop()
+              enemys[index].count++
             if(!falling&&moving!=='jump'){
               health-=1
               falling=true
+              if(enemy.count>=3){enemys[index]=null}
             }
           }
           else {
@@ -150,13 +156,21 @@ function App() {
             if (enemy.position[0]+modifier <= obj.position[0]-progress  && enemy.position[0]+modifier >= obj.position[0]-progress -2 && enemy.position[1] >= obj.position[1]&& enemy.position[1] <= obj.position[1] +6){//can use enemy.height / width
               enemy.health-=obj.damage
               objects[ind]=null
-              if(enemy.name==='badKid'&&obj.itemClassName==='gift') {enemys[index]=null}
+              if(enemy.name==='badKid'&&obj.itemClassName==='gift') {enemys[index].health=0}
+              if(enemy.name==='badKid'&&obj.itemClassName==='coal') {enemys[index].health-=40}  
               if(enemy.name==='toy'&&obj.itemClassName==='nut') {enemys[index].health-=10}  
               if(enemy.name==='fairy'&&obj.itemClassName==='coke') {enemys[index].health-=20}
               if(enemy.name==='fairy'&&obj.itemClassName==='candy-cane') {enemys[index].health-=5}
-              if(enemy.name==='badKid'&&obj.itemClassName==='coal') {enemys[index].health-=40}  
-              if(enemy.name==='snowman'&&obj.itemClassName==='salt') {enemys[index]=null}    
-              if(enemy.health<=0){enemys[index]=null}
+              if(enemy.name==='ginger'&&obj.itemClassName==='coke') {enemys[index].health-=4}
+              if(enemy.name==='ginger'&&obj.itemClassName==='candy-cane') {enemys[index].health-=3}
+              if(enemy.name==='ginger'&&obj.itemClassName==='nut') {enemys[index].health-=2}
+              if(enemy.name==='snowman'&&obj.itemClassName==='salt') {enemys[index].health=0}    
+              if(enemy.health<=0){
+                if(enemys[index].drop) {
+                  enemys[index].drop.position=[enemy.position[0],enemy.position[1]+6]
+                  itemLocations.push(enemys[index].drop)
+                }
+                enemys[index]=null}
             }
            }
         })
@@ -177,7 +191,8 @@ function App() {
     }
   })
 
-  let landed = platforms.filter((platform)=>{return platform.position[0]===position[0]&&platform.position[1]>=Math.floor(position[1]-13)})
+  let landed = platforms.filter((platform)=>{return platform[0]===position[0]&&platform[1]>=Math.floor(position[1]-11)})
+
   if(lift>0&&lift<=maxJump) {
     airborn = true
     y = y-7/lift
@@ -186,14 +201,18 @@ function App() {
     lift=lift%maxJump
   }
 
+
+
+
+
   if(lift===0) {
     if(y<58){
       modifier = x===10&&moving==='left'? modifier+1 : x===50&&moving==='right'? modifier-1 : modifier
       if(landed.length>0){
-        if (landed[0].position[1]>=y+.5) {
+        if (landed[0][1]>=y+.5) {
          landed = [] 
         } else {
-          y=landed[0].position[1]
+          y=landed[0][1]
           fall=0
         }
       }
@@ -270,7 +289,10 @@ const handleResize = () => {
     let dir = elf.position[0]<position[0]? 1 : -1
     elf.flip = elf.position[0]<position[0]? 1 : -1
     if(Math.abs(elf.position[0]-position[0])<65) {
+      if(!walls.some((wall)=>{return wall[0]===elf.position[0]+dir && wall[1]===elf.position[1] })) {
+
       elf.position[0]+=dir/2
+      }
     }
     return elf
   }
@@ -366,7 +388,7 @@ const handleResize = () => {
   }
 
   const keyDown = (e) => {
-    if(e.keyCode===13){active() }
+    if(e.keyCode===13){if(!isActive){active()} }
     if(e.keyCode===32){jump() }
     if(e.keyCode===39){right() }
     if(e.keyCode===37){left() }  
@@ -375,7 +397,7 @@ const handleResize = () => {
   }
 
 const keyUp = (e) => {
-    if(e.keyCode===32){jump() }
+    if(e.keyCode===32){}
     if(e.keyCode===39) {
       moving=''
       stop()
@@ -386,7 +408,7 @@ const keyUp = (e) => {
     }
     if(e.keyCode===38){ } //up
     if(e.keyCode===40){ }  //down
-  }
+  }  
 
   const scroll = () => {
     progress = moving==="left"? progress+1 : moving==="right"?progress-1: progress
@@ -413,7 +435,7 @@ const keyUp = (e) => {
 
   var coke = () => {
     objects.push({damage: 3, itemClassName: 'coke', position:[pos[0],pos[1]-.5],direction:direction,range:25})
-    decrementActiveItem('Coke')    
+    decrementActiveItem('Coke')
   }
 
   var salt = () => {
@@ -449,7 +471,7 @@ const keyUp = (e) => {
           if(inv.name===item.name){
             inventory[index].count=inventory[index].count+item.count
             if(activeItem.name===item.name){activeItem.count+=item.count}
-            addItems=true
+            addItems=true  
           }
         })
         if(!addItems){inventory.push({name: item.name,className: item.className,method: item.method, count: item.count})}
@@ -463,12 +485,12 @@ const keyUp = (e) => {
   const [action, setAction] = useState(false)
   const [overlay, setOverlay] = useState(null)
   var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method, count: item.count}})
-  var active = () => {eval(activeItem.method+'()')}
+  var active = () => {isActive=true; eval(activeItem.method+'()')}
 
   playerClass = playerClass.replace(' falling','')
   playerClass += falling? ' falling' : ''
   if(falling){playerClass = playerClass.replace(' run','')}
-
+    
   return (
     <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{keyDown(e)}} onKeyUp={(e)=>{keyUp(e)}}> 
     <button className="button-left" onMouseDown={left} onMouseUp={stop} onTouchStart={left} onTouchEnd={stop}>
@@ -493,9 +515,9 @@ const keyUp = (e) => {
       {elves.map((obj)=>{return obj})}
       {toys.map((obj)=>{return obj})}
       {badKids.map((obj)=>{return obj})}
-      {platforms.map((obj)=>{return <div className="platform" style={{left: obj.position[0]+progress+modifier+'vw', top: (obj.position[1]+11)*vh+"px"}}></div>})}
-      {walls.map((obj)=>{return <div className="wall" style={{left: obj[0]+progress+modifier+'vw', top: obj[1]*vh+"px"}}></div>})}
-      {itemLocations.map((obj)=>{return <div className={"fieldItem "+obj.className} style={obj.position?{left: obj.position[0]+progress+modifier+'vw', top: obj.position[1]+"vh"}:null}></div>})}
+      {platformRender.map((obj)=>{return <div className="platform" style={{left: obj[0]+progress+modifier+'vw', top: (obj[1]+11)*vh+"px"}}></div>})}
+      {wallsRender.map((obj)=>{return <div className="wall" style={{left: obj[0]+progress+modifier+'vw', top: obj[1]*vh+"px"}}></div>})}
+      {itemLocationsRender.map((obj)=>{return <div className={"fieldItem "+obj.className} style={obj.position?{left: obj.position[0]+progress+modifier+'vw', top: obj.position[1]+"vh"}:null}></div>})}
       {objects.map((obj)=>{return <div className={"active "+obj.itemClassName+"-missile"} style={objects[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
       {snowballs.map((obj)=>{return <div className="snowball" style={snowballs[0]?{left: obj.position[0]+'vw', top: obj.position[1]+"vh"}:null}></div>})}
     </div>

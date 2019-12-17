@@ -125,6 +125,7 @@ body {
   opacity: .5;
   border-radius: 15%;
   height: 1vw;
+  z-index: 2
 }
 
 .snowball {
@@ -310,24 +311,28 @@ body {
 }
 
 .salt-missile {
+  animation: rotateZ 1s;
   height: 2vw;
   width: 2vw!important;
   background-image: url('resources/images/salt.png');  
 }
 
 .coke-missile {
+  animation: rotateZ 1s;
   height: 3vw;
   width: 3vw!important;
   background-image: url('resources/images/coke.png');
 }
 
 .coal-missile {
+  animation: rotateZ 1s;
   height: 1vw;
   width: 1vw!important;
   background-image: url('resources/images/coal.png');
 }
 
 .nut-missile {
+  animation: rotateZ 1s;
   height: 1vw;
   width: 1vw!important;
   background-image: url('resources/images/nut.png');
@@ -385,6 +390,14 @@ body {
 }
 
 @keyframes rotateZ {
+  0% {transform: rotateZ(0deg);}
+  25% {transform: rotateZ(90deg);}
+  50% {transform: rotateZ(180deg);}
+  75% {transform: rotateZ(270deg);}
+}
+
+
+@keyframes rotateZflash {
   0% {transform: rotateZ(0deg);background-color: transparent;}
   25% {transform: rotateZ(90deg);background-color: rgba(255,255,255,.7);}
   50% {transform: rotateZ(180deg);background-color: transparent;}
