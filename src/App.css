@@ -66,6 +66,7 @@ body {
   margin:0;
   padding: 0;
   z-index: 1;
+  margin-top: -.5vh;
 }
 
 .left {
@@ -294,6 +295,7 @@ body {
   height: 2vw;
   width: 2vw!important;
   transform: translateY(1vw) translateX(.5vw);
+  animation: letter 1s linear infinite;
 }
 
 .coal-bucket {
@@ -353,8 +355,8 @@ body {
   position: fixed;
   background-color: rgba(0,128,255,.4);
   box-shadow:0vw 0vw .2vw .2vw rgba(255,255,255,0.8) inset;
-  transform: translateX(13vw);
-  z-index: 1;
+  transform: translateX(13.25vw);
+  z-index: 0;
 }
 
 .wall {
@@ -389,6 +391,65 @@ body {
   color: green;
 }
 
+.instruction-modal {
+  letter-spacing: .2rem;
+  z-index: 5;
+  background-color: red;
+  background-image: url('resources/images/wreath.png');
+  background-position: center;
+  background-size: 100vw 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2.5rem;
+  font-family: sans-serif;
+  flex-wrap: wrap;
+}
+
+.instruction-modal button {
+  background-color: green;
+  color: white;
+  border: none;
+  font-size: 2.2rem;
+  padding: .5rem 1.5rem;
+  font-family: Girassol;
+}
+
+.modal-text {
+  text-align: center;
+  width: 40%;
+  line-height: 1.5;
+}
+
+.screen-demo {
+  background-image: url('resources/images/instructions.png');
+}
+
+.demo-1 {
+  background-image: url('resources/images/instructions1.png');
+}
+
+.demo-2 {
+  background-image: url('resources/images/instructions2.png');
+}
+
+.demo-3 {
+  background-image: url('resources/images/instructions3.png');
+}   
+
+.screen-demo .modal-text {
+  background-color: black;
+  padding: .5rem;
+}
+
+.modal-text {
+  font-family: Girassol;
+}
+
 @keyframes rotateZ {
   0% {transform: rotateZ(0deg);}
   25% {transform: rotateZ(90deg);}
@@ -403,6 +464,12 @@ body {
   50% {transform: rotateZ(180deg);background-color: transparent;}
   75% {transform: rotateZ(270deg);background-color: rgba(255,255,255,.7);}
 }
+
+@keyframes letter {
+  from {box-shadow: 0 0 1vw 1vw  white;}
+  to {box-shadow: none;}
+}
+
 
 @keyframes flash {
   from {opacity: 1;}

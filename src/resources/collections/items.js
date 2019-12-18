@@ -6,7 +6,7 @@ var items = [
 
 {name:"Coal",className:"coal-bucket",position: [678,64],method:'coal',count: 20},
 
-{name:"Cookies",className:"cookies",position: [50,64]},
+//{name:"Cookies",className:"cookies",position: [50,64]},
 {name:"Cookies",className:"cookies",position: [853,15]},
 
 {name:"Coke",className:"coke",position: [1146,1],method:'coke',count: 20},
@@ -15,12 +15,13 @@ var items = [
 
 {name:"Nuts",className:"nuts",position: [483,14],method:'nuts',count: 20}, //+4
 
-{name:"Letter",className:"letter",position: [50,64]}//,message: 'Sweets for my Sweet.'}
+//{name:"Letter",className:"letter",position: [50,64]}//,message: 'Sweets for my Sweet.'}
 ,{name:"Letter",className:"letter",position: [150,64]}//,message: 'Sweets for my Sweet.'}
 ,{name:"Letter",className:"letter",position: [814,64]}
 ,{name:"Letter",className:"letter",position: [905,64]}
 ,{name:"Letter",className:"letter",position: [280,30]} //+5
 ,{name:"Letter",className:"letter",position: [1168,33]}
+,{name:"Letter",className:"letter",position: [1183,15]}
 ]
 
 export default items
