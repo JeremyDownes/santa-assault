@@ -282,6 +282,7 @@ const handleResize = () => {
     } 
     if( window.innerHeight<window.innerWidth&&overlay) {
       setOverlay(null)
+      window.location.reload()
     }
   }
 

@@ -3,6 +3,11 @@ html *:not[.health-bar] {
   width: 0!important;
 }
 
+html *{
+  overflow: hidden!important;
+  box-sizing: border-box;
+}
+
 body {  
   overflow-y: hidden;
   overflow-x: hidden;
@@ -16,6 +21,8 @@ body {
 #root {
   width: 100%!important;
 }
+
+
 
 .App {
   display: flex;
@@ -35,7 +42,7 @@ body {
 .button-right {
   background-image: url('resources/images/arrow-right.png');
   position: fixed;
-  right: 1vw;
+  right: 2vw;
 }
 
 .button-left, .button-right {
@@ -103,7 +110,7 @@ body {
   height: 100vh;
   color: white;
   background-color: #282c34;
-  z-index: 4;
+  z-index: 6;
 }
 
 .snowman, .gumdrop, .ginger, .badKid, .black-ice, .fairy, .elf, .toy  {
@@ -219,13 +226,14 @@ body {
 }
 
 .blinder {
-  margin: 0;
+  box-sizing: border-box;
+  margin: 0!important;
   position: fixed;
   top:0;
   left: 0;
-  border-left: 1vw solid #282c34;
-  border-right: 1vw solid #282c34;
-  width: 98vw!important;
+  border-left: 2vw solid #282c34;
+  border-right: 2vw solid #282c34;
+  width: 100vw!important;
   height: 100%;
   z-index: 3;
   pointer-events: none;
@@ -233,15 +241,17 @@ body {
 
 .menu {
   height: 20vh;
-  width: 98vw!important;
+  width: 96vw;
   background-color: #555;
   position: fixed;
   z-index: 3;
   top: 74vh;
+  left: 2vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  margin: auto;
 }
 
 .item {
@@ -407,7 +417,8 @@ body {
   color: white;
   font-size: 2.5rem;
   font-family: sans-serif;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  font-size: 2.2rem;
 }
 
 .instruction-modal button {
@@ -474,4 +485,17 @@ body {
 @keyframes flash {
   from {opacity: 1;}
   to { opacity: 0;}
+}
+
+@media only screen and (max-width: 1080px) {
+
+
+.menu {
+  width: 98vw;
+}
+
+.instruction-modal *{
+  font-size: 1.2rem;
+  }
+
 }
