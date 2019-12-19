@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import platforms from './resources/collections/platforms.js'
 import enemies from './resources/collections/enemys.js'
+import randomEnemies from './resources/collections/randomEnemys.js'
 import walls from './resources/collections/walls.js'
 import itemLocations from './resources/collections/items.js'
 
@@ -9,7 +10,6 @@ import itemLocations from './resources/collections/items.js'
   var maxJump = 7
   var x=9
   var y=58
-  var floor = 58
   var playerClass = "player right"
   var moving = null
   var modifier = 0
@@ -33,17 +33,20 @@ import itemLocations from './resources/collections/items.js'
   var falling = false
   var hit = ''
   var letters = 0
+  var sleigh = false
+  var throwCount = 0
   var modals= window.innerWidth>1080? [<div class='instruction-modal'><p class='modal-text'>The Naughty Children of the World have teamed up with some Disgruntled Elves and ran off with all the children's letters to Santa...</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal'><p class='modal-text'>They used their Elf Magic to bring Snowmen, Toys, and Treats to life and summoned Sugar Plumb Fairies to defend them...</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal'><p class='modal-text'>Help Santa to collect all the letters so he can deliver presents to the Good Children of the World!</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal screen-demo desktop'><p class='modal-text'>Click on the screen. Then use the arrow keys to move Santa around. Use SPACEBAR to jump.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal screen-demo desktop'><p class='modal-text'>Press ENTER to use the Active Item. Select the active item by clicking on an inventory item below.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal screen-demo demo-3'><p class='modal-text'>Some items work better on some characters than others.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal'><p class='modal-text'>Some letters may be hidden, while others may be held by a character.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal'><p class='modal-text'>Once you have collected enough letters, find Santa's sleigh to complete the mission.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal'><p class='modal-text'>Watch out for Black Ice and try not to get stuck in the Giant Gumdrops!</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,] : [<div class='instruction-modal'><p class='modal-text'>The Naughty Children of the World have teamed up with some Disgruntled Elves and ran off with all the children's letters to Santa...</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal'><p class='modal-text'>They used their Elf Magic to bring Snowmen, Toys, and Treats to life and summoned Sugar Plumb Fairies to defend them...</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal'><p class='modal-text'>Help Santa to collect all the letters so he can deliver presents to the Good Children of the World!</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal screen-demo demo-1'><p class='modal-text'>Use the arrows to move Santa around. Tap the screen to jump.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal screen-demo demo-2'><p class='modal-text'>Tap the action box to use the Active Item. Select the Active Item by tapping on an Inventory Item below.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal screen-demo demo-3'><p class='modal-text'>Some items work better on some characters than others.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,  <div class='instruction-modal'><p class='modal-text'>Some letters may be hidden, while others may be held by a character.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal'><p class='modal-text'>Once you have collected enough letters, find Santa's sleigh to complete the mission.</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>, <div class='instruction-modal'><p class='modal-text'>Watch out for Black Ice and try not to get stuck in the Giant Gumdrops!</p><button onClick = {()=>{modals.splice(0,1)}}>Next&nbsp;&nbsp;&nbsp;></button></div>,]
 
   let vh = window.innerHeight * 0.01
   let vw = window.innerWidth * 0.01
-  let aspect = vw/vh
   document.documentElement.style.setProperty('--vh', `${vh}px`);
   document.documentElement.style.setProperty('--vw', `${vh}pw`);
+  let isActive = false
 
 
 
 function App() {
+
   document.documentElement.style.setProperty('--life', `${health}vw`);
   let platformRender = platforms.filter((platform)=>{return Math.abs(platform[0]-position[0])<80})
   let wallsRender = walls.filter((wall)=>{return Math.abs(wall[0]-position[0])<80})
@@ -59,7 +62,6 @@ function App() {
   snowfall2++
   snowfall%=385
   snowfall2%=730
-  let isActive = false
 
   objects = objects.filter((enemy)=>{return enemy!==null})
   if(snowballs){snowballs = snowballs.filter((enemy)=>{return enemy!==null})}else{snowballs=[]}
@@ -83,7 +85,10 @@ function App() {
   blackIces = blackIces.map((enemy)=>{return <figure className='black-ice' style={{left: enemy.position[0]+progress+modifier+"vw", top: enemy.position[1]*vh+"px"}}></figure>})
 
   useEffect(()=>{
-    if(health<=0){window.location.reload()}
+    if(health<=0){
+      modals.unshift(<div class='instruction-modal'><p class='modal-text'>You failed to save Christmas<br/><br/>Game Over</p></div>)
+      setTimeout(()=>{window.location.reload()},3000)
+    }
     //console.log(action)
     // console.log(moving)
     itemLocations.forEach((location,index)=>{
@@ -359,16 +364,19 @@ const handleResize = () => {
   }
 
   const left = () => {
-
+    if(!playerClass.includes(falling)) {
       moving="left" 
       direction = "left"
       playerClass="player run left"
+    }
   }
 
   const right = () => {
+    if(!playerClass.includes(falling)) {    
       moving="right" 
       direction = "right"
       playerClass="player run right"
+    }
   }
 
   const stop = () => {
@@ -398,6 +406,7 @@ const handleResize = () => {
   }
 
 const keyUp = (e) => {
+    if(e.keyCode===13){if(isActive){isActive=false; playerClass=playerClass.replace(' throw')} }
     if(e.keyCode===32){}
     if(e.keyCode===39) {
       moving=''
@@ -486,11 +495,40 @@ const keyUp = (e) => {
   const [action, setAction] = useState(false)
   const [overlay, setOverlay] = useState(null)
   var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method, count: item.count}})
-  var active = () => {isActive=true; eval(activeItem.method+'()')}
+  var active = () => {playerClass+=' throw'; isActive=true; eval(activeItem.method+'()')}
 
   playerClass = playerClass.replace(' falling','')
   playerClass += falling? ' falling' : ''
   if(falling){playerClass = playerClass.replace(' run','')}
+
+  if(position[0]>1500) {
+    let chance = Math.random()
+    if (chance>.98) {
+      let newEnemy = randomEnemies[Math.floor(Math.random()*13)]
+      newEnemy.position[0]=position[0]+80
+      enemys.push(newEnemy)
+    }
+  }
+
+  if(letters>=12&&!sleigh) {
+    modals.unshift(<div class='instruction-modal'><p class='modal-text'>You've collected enough letters. Get to the sleigh!</p><button onClick = {()=>{modals.splice(0,1)}}>OK</button></div>)
+    sleigh=true
+  }
+
+  if(sleigh&&position[0]===160&&position[1]===58) {
+    modals.unshift(<div class='instruction-modal final'><img className='sleigh-final' src='sleigh_santa.png'/><p class='modal-text'>You saved Christmas! Santa and the Good Children thank you.</p><p class='modal-text'>Play Again?</p><div className='button-container'> <button onClick = {()=>{window.location.reload()}}>Yes</button><button className='no' onClick = {()=>{window.location.href='https://celsiusmarketing.com'}}>No</button></div></div>)
+  }
+
+  if(isActive&&throwCount<=8) {
+    throwCount++
+  }
+
+
+  if(throwCount===8) {
+    throwCount=0
+    isActive=false
+    playerClass=playerClass.replace(' throw','')
+  }
     
   return (
     <div className="App" onLoad={handleResize()} onKeyDown={(e)=>{keyDown(e)}} onKeyUp={(e)=>{keyUp(e)}}> 
@@ -504,9 +542,10 @@ const keyUp = (e) => {
       <section className='health-bar' style={{width: health+'vw!important'}}></section>
       <section className={'action-box '+activeItem.className} onClick={active}>{activeItem.count? 'x '+activeItem.count:null}</section>
       <section className='mailbox'><img src='letter.png'/><span>{' x '+letters}</span></section>
-      <figure className={playerClass} style={{left: pos[0]*vw+'px', top: pos[1]*vh+'px'}}> 
+      <figure className={playerClass} style={{left: pos[0]*vw+'px', top: pos[1]*vh+'px'}}>
       <div className={hit}></div>
       </figure>
+      {sleigh? <div className='sleigh' style={{left:170+progress+modifier+'vw'}}></div>: null}
       {snowmen.map((obj)=>{return obj})}
       {gumdrops.map((obj)=>{return obj})}
       {blackIces.map((obj)=>{return obj})}

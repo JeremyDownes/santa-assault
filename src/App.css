@@ -92,6 +92,10 @@ body {
  background-image: url('resources/images/jump.gif'); 
 }
 
+.throw {
+ background-image: url('resources/images/throw.gif'); 
+}
+
 .falling.right {
   transition: transform .1s;
   transform: rotateZ(-90deg) translateX(-50%);
@@ -199,7 +203,9 @@ body {
   left: 2vw;
   border-radius: 10%;
   z-index: 2;
-  background-size: cover;
+  background-size: 80%;
+  background-position: center;
+  background-repeat: no-repeat;
   background-color: white;
   display: flex;
   justify-content: flex-end;
@@ -207,7 +213,7 @@ body {
   padding: .5rem;
   font-weight: bold;
   font-family: sans-serif;
-  color: firebrick;
+  color: firebrick;  
 }
 
 .screen {
@@ -278,42 +284,51 @@ body {
 
 .candy-cane {
   background-image: url('resources/images/candy-cane.jpg');
+  transform: translateX(1.5vw);
 }
 
 .cookies {
   background-image: url('resources/images/cookies.png');
+  transform: translateX(1.5vw);
 }
 
 .gift {
   background-image: url('resources/images/gift.png');
+  transform: translateX(1.5vw);
 }  
 
 .coke {
   background-image: url('resources/images/coke.png');
+  transform: translateX(1.5vw);
 }  
 
 .salt {
   background-image: url('resources/images/salt.png');
+  transform: translateX(1.5vw);
+
 }
 
 .nuts {
   background-image: url('resources/images/nuts.png');
+  transform: translateX(1.5vw);  
 }
 
 .letter {
   background-image: url('resources/images/letter.png'); 
   height: 2vw;
   width: 2vw!important;
-  transform: translateY(1vw) translateX(.5vw);
+  transform: translateY(1vw) translateX(1.5vw);
   animation: letter 1s linear infinite;
 }
 
 .coal-bucket {
   background-image: url('resources/images/coal-bucket.png');
+  transform: translateX(1.5vw);
+
 }
 
 .candy-cane-missile {
-  animation: rotateZ 1s;
+  animation: rotateZflash 1s;
   background-image: url('resources/images/candy-cane.png'); 
   border-radius: 50%;
 }
@@ -392,13 +407,17 @@ body {
 }
 
 .mailbox img {
-  width: 50%;
   padding: 1vw;
+  width: 100%; 
+  height: auto;
 }
+
+
 
 .mailbox span {
   white-space: nowrap!important;
   color: green;
+  overflow: visible!important;
 }
 
 .instruction-modal {
@@ -432,7 +451,7 @@ body {
 
 .modal-text {
   text-align: center;
-  width: 40%;
+  width: 50%;
   line-height: 1.5;
 }
 
@@ -461,6 +480,40 @@ body {
   font-family: Girassol;
 }
 
+.sleigh {
+  position: fixed;
+  top:58vh;
+  height: 6vw;
+  width: 26vw!important;
+  background-image: url('resources/images/sleigh.png');
+  background-size: 100% 100%;
+}
+
+.sleigh-final {
+  top: 8vh;
+  position: absolute;
+  height: 6vw;
+  animation: sleigh 20s linear infinite;
+}
+
+.final {
+  background-image: url('resources/images/background.jpg');
+  background-size: cover;
+}
+
+.final .modal-text {
+  background-color: black;
+}
+
+.button-container {
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+.no {
+  background-color: firebrick!important;
+}
+
 @keyframes rotateZ {
   0% {transform: rotateZ(0deg);}
   25% {transform: rotateZ(90deg);}
@@ -485,6 +538,15 @@ body {
 @keyframes flash {
   from {opacity: 1;}
   to { opacity: 0;}
+}
+
+
+@keyframes sleigh {
+  0% {left:-28vw; transform: rotateY(0deg);}
+  25% {left: 100vw; transform: rotateY(0deg);}
+  50% {left: 100vw; transform: rotateY(180deg);}
+  75% {left: -28vw; transform: rotateY(180deg);}
+  100% {left: -28vw; transform: rotateY(0deg);}
 }
 
 @media only screen and (max-width: 1080px) {
