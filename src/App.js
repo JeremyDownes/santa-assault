@@ -89,8 +89,7 @@ function App() {
       modals.unshift(<div class='instruction-modal'><p class='modal-text'>You failed to save Christmas<br/><br/>Game Over</p></div>)
       setTimeout(()=>{window.location.reload()},3000)
     }
-    //console.log(action)
-    // console.log(moving)
+
     itemLocations.forEach((location,index)=>{
       if( location.position[0] <= position[0] +2 && location.position[0] >= position[0] -1 && location.position[1] >= position[1] && location.position[1] <= position[1] +6 ) {
         handleItem(location,index)
@@ -509,8 +508,10 @@ const keyUp = (e) => {
     let chance = Math.random()
     if (chance>.98) {
       let newEnemy = randomEnemies[Math.floor(Math.random()*13)]
-      newEnemy.position[0]=position[0]+80
-      enemys.push(newEnemy)
+      if(newEnemy) {
+        newEnemy.position[0]=position[0]+80
+        enemys.push(newEnemy)
+      }
     }
   }
 
