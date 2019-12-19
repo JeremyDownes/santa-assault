@@ -128,7 +128,7 @@ function App() {
             if(!falling&&moving!=='jump'){
               health-=1
               falling=true
-              if(enemy.count>=3){enemys[index]=null}
+              if(enemy.count>=3){falling=false;enemys[index]=null;playerClass=playerClass.replace(' falling','')}
             }
           }
           else {
@@ -364,18 +364,22 @@ const handleResize = () => {
   }
 
   const left = () => {
-    if(!playerClass.includes(falling)) {
+    if(!playerClass.includes('falling')) {
       moving="left" 
       direction = "left"
       playerClass="player run left"
+    } else {
+      moving = ''
     }
   }
 
   const right = () => {
-    if(!playerClass.includes(falling)) {    
+    if(!playerClass.includes('falling')) {    
       moving="right" 
       direction = "right"
       playerClass="player run right"
+      } else {
+      moving = ''
     }
   }
 
@@ -495,7 +499,7 @@ const keyUp = (e) => {
   const [action, setAction] = useState(false)
   const [overlay, setOverlay] = useState(null)
   var items = inventory.map((item)=>{ return {name: item.name,className: item.className,method: item.method, count: item.count}})
-  var active = () => {playerClass+=' throw'; isActive=true; eval(activeItem.method+'()')}
+  var active = () => {if(!playerClass.includes('run')){playerClass+=' throw'}; isActive=true; eval(activeItem.method+'()')}
 
   playerClass = playerClass.replace(' falling','')
   playerClass += falling? ' falling' : ''
