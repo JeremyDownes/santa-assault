@@ -6,6 +6,7 @@ html *:not[.health-bar] {
 html *{
   overflow: hidden!important;
   box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 body {  
@@ -404,6 +405,7 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   z-index: 2;
+  overflow: visible!important;
 }
 
 .mailbox img {
@@ -559,5 +561,17 @@ body {
 .instruction-modal *{
   font-size: 1.2rem;
   }
+
+.mailbox img {
+  padding: 0vw;
+}
+
+.mailbox {
+  left: 11vw;
+}
+
+.mailbox span {
+  transform: translateX(1vw);
+}
 
 }
