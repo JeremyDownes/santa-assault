@@ -497,7 +497,7 @@ body {
   overflow: visible!important;
 }
 
-.instruction-modal {
+.instruction-modal, .splash-screen {
   letter-spacing: .2rem;
   z-index: 5;
   background-color: red;
@@ -557,6 +557,14 @@ body {
 .demo-3 {
   background-image: url('resources/images/instructions3.png');
 }   
+
+.splash-screen {
+  background-color: #e5c19d;
+  background-size: contain;
+
+  background-repeat: no-repeat;
+  background-image: url('resources/images/splash-screen-mobile.jpg');
+}
 
 .screen-demo .modal-text {
   background-color: black;
@@ -677,6 +685,25 @@ body {
 
 @media only screen and (max-width: 1080px) {
 
+.screen-demo {
+  background-image: url('resources/images/instructions-mobile.png');
+}
+
+.demo-1 {
+  background-image: url('resources/images/instructions1-mobile.png');
+}
+
+.demo-2 {
+  background-image: url('resources/images/instructions2-mobile.png');
+}
+
+.demo-3 {
+  background-image: url('resources/images/instructions3-mobile.png');
+} 
+
+.splash-screen {
+  background-image: url('resources/images/splash-screen-mobile.jpg');
+}
 
 .menu {
   width: 98vw;
