@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/santa-assault/static/css/main.4ce92437.chunk.css",
+    "main.js": "/santa-assault/static/js/main.5c722ed7.chunk.js",
+    "main.js.map": "/santa-assault/static/js/main.5c722ed7.chunk.js.map",
+    "runtime-main.js": "/santa-assault/static/js/runtime-main.a7849926.js",
+    "runtime-main.js.map": "/santa-assault/static/js/runtime-main.a7849926.js.map",
+    "static/js/2.98c3c917.chunk.js": "/santa-assault/static/js/2.98c3c917.chunk.js",
+    "static/js/2.98c3c917.chunk.js.map": "/santa-assault/static/js/2.98c3c917.chunk.js.map",
+    "index.html": "/santa-assault/index.html",
+    "precache-manifest.1a98630ff05b34fb4c925cb92657321b.js": "/santa-assault/precache-manifest.1a98630ff05b34fb4c925cb92657321b.js",
+    "service-worker.js": "/santa-assault/service-worker.js",
+    "static/css/main.4ce92437.chunk.css.map": "/santa-assault/static/css/main.4ce92437.chunk.css.map",
+    "static/js/2.98c3c917.chunk.js.LICENSE.txt": "/santa-assault/static/js/2.98c3c917.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/santa-assault/static/media/wreath.08428c38.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a7849926.js",
+    "static/js/2.98c3c917.chunk.js",
+    "static/css/main.4ce92437.chunk.css",
+    "static/js/main.5c722ed7.chunk.js"
+  ]
+}
